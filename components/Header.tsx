@@ -3,7 +3,9 @@ import { View, Text, TouchableOpacity, StyleSheet, Image, LayoutChangeEvent } fr
 import Svg, { Path, Circle } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
+import { useRouter } from 'expo-router';
 import { useApp } from '@/contexts/AppContext';
+import { useT } from '@/hooks/useT';
 import { colors, gradients } from '@/constants/colors';
 
 const STUDENT_PHOTOS: Record<string, number> = {
@@ -11,8 +13,10 @@ const STUDENT_PHOTOS: Record<string, number> = {
   JK: require('@/assets/images/avatar-julia.jpg'),
 };
 
-export default function Header() {
-  const { displayName, activeStudent, activeYear, setStudentSheetVisible, setProfileSheetVisible } = useApp();
+export default function Header({ showStudentSelector = true, notifRoute = '/(main)/notificacoes', disableNotif = false }: { showStudentSelector?: boolean; notifRoute?: string; disableNotif?: boolean }) {
+  const { displayName, activeStudent, activeYear, setStudentSheetVisible, setProfileSheetVisible, unreadNotificationsCount, profilePhoto } = useApp();
+  const t = useT();
+  const router = useRouter();
   const [size, setSize] = useState({ width: 0, height: 0 });
   const [phase, setPhase] = useState(0);
 
@@ -67,7 +71,7 @@ export default function Header() {
             onPress={() => setProfileSheetVisible(true)}
             activeOpacity={0.8}
           >
-            <Image source={require('@/assets/images/avatar.jpg')} style={styles.avatarImage} />
+            <Image source={profilePhoto ?? require('@/assets/images/avatar.jpg')} style={styles.avatarImage} />
             <LinearGradient
               colors={gradients.brand}
               start={{ x: 0, y: 0 }}
@@ -75,7 +79,7 @@ export default function Header() {
               style={styles.onlineDot}
             />
           </TouchableOpacity>
-          <Text style={styles.greeting}>Olá, {nomeCapitalizado}!</Text>
+          <Text style={styles.greeting}>{t('profile.greeting', { name: nomeCapitalizado })}</Text>
         </View>
 
         <View style={styles.right}>
@@ -84,15 +88,26 @@ export default function Header() {
               <Path d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" stroke={colors.gray[900]} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </Svg>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.iconBtn} activeOpacity={0.7}>
+          <TouchableOpacity
+            style={styles.iconBtn}
+            activeOpacity={0.7}
+            onPress={disableNotif ? undefined : () => router.push(notifRoute as any)}
+          >
             <Svg width={20} height={20} viewBox="0 0 24 24" fill="none">
               <Path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0" stroke={colors.gray[900]} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </Svg>
+            {unreadNotificationsCount > 0 && (
+              <View style={styles.notifBadge}>
+                <Text style={styles.notifBadgeText}>
+                  {unreadNotificationsCount > 9 ? '9+' : unreadNotificationsCount}
+                </Text>
+              </View>
+            )}
           </TouchableOpacity>
         </View>
       </View>
 
-      <LinearGradient
+      {showStudentSelector && <LinearGradient
         colors={[gradients.subtle[1], gradients.subtle[0]]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
@@ -132,7 +147,7 @@ export default function Header() {
         </Svg>
         </BlurView>
       </TouchableOpacity>
-      </LinearGradient>
+      </LinearGradient>}
     </View>
   );
 }
@@ -200,6 +215,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 6,
+  },
+  notifBadge: {
+    position: 'absolute',
+    top: -4,
+    right: -4,
+    minWidth: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor: colors.error[500],
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 3,
+    borderWidth: 1.5,
+    borderColor: colors.base.white,
+  },
+  notifBadgeText: {
+    fontSize: 9,
+    fontWeight: '700',
+    color: colors.base.white,
+    lineHeight: 12,
   },
   studentCardBorder: {
     borderRadius: 14,

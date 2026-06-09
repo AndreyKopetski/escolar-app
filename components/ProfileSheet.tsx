@@ -14,9 +14,11 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { colors, gradients } from '@/constants/colors';
 import { useApp } from '@/contexts/AppContext';
+import { useT } from '@/hooks/useT';
 
 export default function ProfileSheet() {
-  const { displayName, userEmail, isProfileSheetVisible, setProfileSheetVisible } = useApp();
+  const { displayName, userEmail, isProfileSheetVisible, setProfileSheetVisible, profilePhoto, language, setLanguage } = useApp();
+  const t = useT();
   const router = useRouter();
 
   const slideAnim = useRef(new Animated.Value(300)).current;
@@ -63,7 +65,7 @@ export default function ProfileSheet() {
           <Animated.View style={[styles.sheet, { transform: [{ translateY: slideAnim }] }]}>
             <View style={styles.sheetHandle} />
             <View style={styles.sheetHeader}>
-              <Text style={styles.sheetTitle}>Meu Perfil</Text>
+              <Text style={styles.sheetTitle}>{t('profile.title')}</Text>
               <TouchableOpacity
                 style={styles.closeBtn}
                 onPress={() => setProfileSheetVisible(false)}
@@ -79,7 +81,7 @@ export default function ProfileSheet() {
             {/* User info */}
             <View style={styles.userRow}>
               <View style={styles.avatarWrapper}>
-                <Image source={require('@/assets/images/avatar.jpg')} style={styles.avatarImage} />
+                <Image source={profilePhoto ?? require('@/assets/images/avatar.jpg')} style={styles.avatarImage} />
                 <LinearGradient
                   colors={gradients.brand}
                   start={{ x: 0, y: 0 }}
@@ -88,7 +90,7 @@ export default function ProfileSheet() {
                 />
               </View>
               <View>
-                <Text style={styles.userName}>Olá, {nomeCapitalizado}!</Text>
+                <Text style={styles.userName}>{t('profile.greeting', { name: nomeCapitalizado })}</Text>
                 <Text style={styles.userEmail}>{userEmail || 'contato@gmail.com.br'}</Text>
               </View>
             </View>
@@ -103,11 +105,40 @@ export default function ProfileSheet() {
                 <Svg width={20} height={20} viewBox="0 0 24 24" fill="none">
                   <Path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" stroke={colors.gray[700]} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </Svg>
-                <Text style={styles.menuItemText}>Meus dados</Text>
+                <Text style={styles.menuItemText}>{t('profile.myData')}</Text>
                 <Svg width={18} height={18} viewBox="0 0 24 24" fill="none">
                   <Path d="M9 18l6-6-6-6" stroke={colors.gray[400]} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </Svg>
               </TouchableOpacity>
+
+              <View style={styles.menuDivider} />
+
+              {/* Idioma */}
+              <View style={styles.menuItem}>
+                <Svg width={20} height={20} viewBox="0 0 24 24" fill="none">
+                  <Path d="M12 22C17.523 22 22 17.523 22 12S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zM2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"
+                    stroke={colors.gray[700]} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </Svg>
+                <Text style={styles.menuItemText}>{t('profile.language')}</Text>
+                <View style={styles.langPills}>
+                  {([
+                    { key: 'es', label: 'ES', full: 'Español' },
+                    { key: 'pt', label: 'PT', full: 'Português' },
+                    { key: 'en', label: 'EN', full: 'English' },
+                  ] as const).map((opt) => (
+                    <TouchableOpacity
+                      key={opt.key}
+                      style={[styles.langPill, language === opt.key && styles.langPillActive]}
+                      onPress={() => setLanguage(opt.key)}
+                      activeOpacity={0.7}
+                    >
+                      <Text style={[styles.langPillText, language === opt.key && styles.langPillTextActive]}>
+                        {opt.label}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
 
               <View style={styles.menuDivider} />
 
@@ -116,7 +147,7 @@ export default function ProfileSheet() {
                 <Svg width={20} height={20} viewBox="0 0 24 24" fill="none">
                   <Path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" stroke={colors.error[600]} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </Svg>
-                <Text style={[styles.menuItemText, styles.logoutText]}>Sair do aplicativo</Text>
+                <Text style={[styles.menuItemText, styles.logoutText]}>{t('profile.logout')}</Text>
                 <Svg width={18} height={18} viewBox="0 0 24 24" fill="none">
                   <Path d="M9 18l6-6-6-6" stroke={colors.gray[400]} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </Svg>
@@ -242,5 +273,29 @@ const styles = StyleSheet.create({
   },
   logoutText: {
     color: colors.error[600],
+  },
+  langPills: {
+    flexDirection: 'row',
+    gap: 6,
+  },
+  langPill: {
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: colors.gray[300],
+    backgroundColor: colors.base.white,
+  },
+  langPillActive: {
+    backgroundColor: colors.success[100],
+    borderColor: colors.brand[500],
+  },
+  langPillText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: colors.gray[500],
+  },
+  langPillTextActive: {
+    color: colors.brand[700],
   },
 });

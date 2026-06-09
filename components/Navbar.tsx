@@ -6,13 +6,14 @@ import { usePathname, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from '@/constants/colors';
 import MenuSheet from '@/components/MenuSheet';
+import { useT } from '@/hooks/useT';
 
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
 type NavItem = {
-  label: string;
+  labelKey: string;
   route: string;
   icon: (active: boolean) => React.ReactNode;
 };
@@ -21,7 +22,7 @@ const iconColor = (active: boolean) => (active ? colors.brand[25] : colors.brand
 
 const NAV_ITEMS: NavItem[] = [
   {
-    label: 'Boletim',
+    labelKey: 'nav.boletim',
     route: '/(main)/boletim',
     icon: (active) => (
       <Svg width={20} height={20} viewBox="0 0 20 20" fill="none">
@@ -30,7 +31,7 @@ const NAV_ITEMS: NavItem[] = [
     ),
   },
   {
-    label: 'Frequência',
+    labelKey: 'nav.frequencia',
     route: '/(main)/historico',
     icon: (active) => (
       <Svg width={20} height={20} viewBox="0 0 20 20" fill="none">
@@ -39,7 +40,7 @@ const NAV_ITEMS: NavItem[] = [
     ),
   },
   {
-    label: 'Aulas',
+    labelKey: 'nav.aulas',
     route: '/(main)/agenda',
     icon: (active) => (
       <Svg width={20} height={20} viewBox="0 0 20 20" fill="none">
@@ -48,7 +49,7 @@ const NAV_ITEMS: NavItem[] = [
     ),
   },
   {
-    label: 'Diário',
+    labelKey: 'nav.diario',
     route: '/(main)/diario',
     icon: (active) => (
       <Svg width={20} height={20} viewBox="0 0 20 20" fill="none">
@@ -57,7 +58,7 @@ const NAV_ITEMS: NavItem[] = [
     ),
   },
   {
-    label: 'Mais',
+    labelKey: 'nav.mais',
     route: '/(main)/mais',
     icon: (active) => (
       <Svg width={20} height={20} viewBox="0 0 20 20" fill="none">
@@ -71,16 +72,17 @@ const NAV_ITEMS: NavItem[] = [
 
 const MAIS_ROUTE = '/(main)/mais';
 
-const SECONDARY_LABELS: Record<string, string> = {
-  merenda: 'Merenda',
-  livros: 'Livros',
-  material: 'M. Escolar',
-  dados: 'Dados Aluno',
+const SECONDARY_LABEL_KEYS: Record<string, string> = {
+  merenda: 'menu.merenda',
+  livros: 'menu.livros',
+  material: 'menu.material',
+  dados: 'menu.dados',
 };
 
 const SPRING = { damping: 22, stiffness: 220, mass: 0.8 };
 
 export default function Navbar() {
+  const t = useT();
   const pathname = usePathname();
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -88,9 +90,10 @@ export default function Navbar() {
 
   const primaryRoutes = NAV_ITEMS.filter((i) => i.route !== MAIS_ROUTE).map((i) => i.route);
   const isOnPrimary = primaryRoutes.some((r) => pathname.includes(r.replace('/(main)/', '')));
-  const secondaryLabel = !isOnPrimary
-    ? Object.entries(SECONDARY_LABELS).find(([key]) => pathname.includes(key))?.[1] ?? null
+  const secondaryLabelKey = !isOnPrimary
+    ? Object.entries(SECONDARY_LABEL_KEYS).find(([key]) => pathname.includes(key))?.[1] ?? null
     : null;
+  const secondaryLabel = secondaryLabelKey ? t(secondaryLabelKey) : null;
 
   const pillX = useSharedValue(-200);
   const pillWidth = useSharedValue(44);
@@ -133,7 +136,7 @@ export default function Navbar() {
             const isActive = !isMais
               ? pathname.includes(item.route.replace('/(main)/', ''))
               : !!secondaryLabel;
-            const label = isMais && secondaryLabel ? secondaryLabel : item.label;
+            const label = isMais && secondaryLabel ? secondaryLabel : t(item.labelKey);
 
             return (
               <TouchableOpacity

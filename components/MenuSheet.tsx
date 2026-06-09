@@ -3,9 +3,10 @@ import { useRef, useEffect, useState } from 'react';
 import Svg, { Path, Circle, Rect } from 'react-native-svg';
 import { useRouter } from 'expo-router';
 import { colors } from '@/constants/colors';
+import { useT } from '@/hooks/useT';
 
 interface MenuItem {
-  label: string;
+  labelKey: string;
   route?: string;
   icon: React.ReactNode;
 }
@@ -14,7 +15,7 @@ const ICON_COLOR = colors.brand[900];
 
 const MENU_ITEMS: MenuItem[] = [
   {
-    label: 'Boletim',
+    labelKey: 'nav.boletim',
     route: '/(main)/boletim',
     icon: (
       <Svg width={24} height={24} viewBox="0 0 20 20" fill="none">
@@ -23,7 +24,7 @@ const MENU_ITEMS: MenuItem[] = [
     ),
   },
   {
-    label: 'Frequência',
+    labelKey: 'nav.frequencia',
     route: '/(main)/historico',
     icon: (
       <Svg width={24} height={24} viewBox="0 0 20 20" fill="none">
@@ -32,7 +33,7 @@ const MENU_ITEMS: MenuItem[] = [
     ),
   },
   {
-    label: 'Aulas',
+    labelKey: 'nav.aulas',
     route: '/(main)/agenda',
     icon: (
       <Svg width={24} height={24} viewBox="0 0 20 20" fill="none">
@@ -41,7 +42,7 @@ const MENU_ITEMS: MenuItem[] = [
     ),
   },
   {
-    label: 'Diário',
+    labelKey: 'nav.diario',
     route: '/(main)/diario',
     icon: (
       <Svg width={24} height={24} viewBox="0 0 20 20" fill="none">
@@ -50,7 +51,7 @@ const MENU_ITEMS: MenuItem[] = [
     ),
   },
   {
-    label: 'Livros',
+    labelKey: 'menu.livros',
     route: '/(main)/livros',
     icon: (
       <Svg width={24} height={24} viewBox="0 0 20 20" fill="none">
@@ -61,7 +62,7 @@ const MENU_ITEMS: MenuItem[] = [
     ),
   },
   {
-    label: 'Merenda',
+    labelKey: 'menu.merenda',
     route: '/(main)/merenda',
     icon: (
       <Svg width={24} height={24} viewBox="0 0 20 20" fill="none">
@@ -71,7 +72,7 @@ const MENU_ITEMS: MenuItem[] = [
     ),
   },
   {
-    label: 'Material\nEscolar',
+    labelKey: 'menu.material',
     route: '/(main)/material',
     icon: (
       <Svg width={24} height={24} viewBox="0 0 20 20" fill="none">
@@ -82,7 +83,7 @@ const MENU_ITEMS: MenuItem[] = [
     ),
   },
   {
-    label: 'Dados\ndo Aluno',
+    labelKey: 'menu.dados',
     route: '/(main)/dados',
     icon: (
       <Svg width={24} height={24} viewBox="0 0 24 24" fill="none">
@@ -99,6 +100,7 @@ interface Props {
 }
 
 export default function MenuSheet({ visible, onClose }: Props) {
+  const t = useT();
   const router = useRouter();
   const sheetAnim = useRef(new Animated.Value(600)).current;
   const [modalVisible, setModalVisible] = useState(false);
@@ -147,14 +149,14 @@ export default function MenuSheet({ visible, onClose }: Props) {
           <View style={styles.grid}>
             {MENU_ITEMS.map((item) => (
               <TouchableOpacity
-                key={item.label}
+                key={item.labelKey}
                 style={styles.gridItem}
                 onPress={() => handlePress(item)}
                 activeOpacity={0.75}
               >
                 <View style={styles.iconBox}>
                   {item.icon}
-                  <Text style={styles.itemLabel}>{item.label}</Text>
+                  <Text style={styles.itemLabel}>{t(item.labelKey)}</Text>
                 </View>
               </TouchableOpacity>
             ))}

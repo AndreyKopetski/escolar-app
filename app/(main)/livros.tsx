@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { colors } from '@/constants/colors';
+import { useT } from '@/hooks/useT';
 
 // ─── Types ────────────────────────────────────────────────
 
@@ -7,7 +8,7 @@ type StatusLivro = 'Emprestado' | 'Atrasado' | 'Entregue';
 
 interface Livro {
   id: string;
-  titulo: string;
+  tituloKey: string;
   dataEmprestimo: string;
   dataDevolucao: string;
   status: StatusLivro;
@@ -18,28 +19,28 @@ interface Livro {
 const livros: Livro[] = [
   {
     id: '1',
-    titulo: 'Meu Pé de Laranja Lima',
+    tituloKey: 'livros.title1',
     dataEmprestimo: '24/02/2025',
     dataDevolucao: '02/03/2025',
     status: 'Emprestado',
   },
   {
     id: '2',
-    titulo: 'O Menino no Espelho',
+    tituloKey: 'livros.title2',
     dataEmprestimo: '12/02/2025',
     dataDevolucao: '24/02/2025',
     status: 'Atrasado',
   },
   {
     id: '3',
-    titulo: 'Capitães da Areia',
+    tituloKey: 'livros.title3',
     dataEmprestimo: '02/02/2025',
     dataDevolucao: '12/02/2025',
     status: 'Entregue',
   },
   {
     id: '4',
-    titulo: 'A Moreninha',
+    tituloKey: 'livros.title4',
     dataEmprestimo: '10/01/2025',
     dataDevolucao: '20/01/2025',
     status: 'Entregue',
@@ -62,6 +63,7 @@ function getStatusStyle(status: StatusLivro) {
 // ─── Tela ────────────────────────────────────────────────
 
 export default function LivrosScreen() {
+  const t = useT();
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
@@ -69,21 +71,27 @@ export default function LivrosScreen() {
           const s = getStatusStyle(livro.status);
           return (
             <View key={livro.id} style={styles.card}>
-              <Text style={styles.cardTitle}>{livro.titulo}</Text>
+              <Text style={styles.cardTitle}>{t(livro.tituloKey)}</Text>
 
               <View style={styles.cardTable}>
                 <View style={styles.cardRow}>
-                  <Text style={styles.cardLabel}>Data de empréstimo</Text>
+                  <Text style={styles.cardLabel}>{t('livros.loanDate')}</Text>
                   <Text style={styles.cardValue}>{livro.dataEmprestimo}</Text>
                 </View>
                 <View style={[styles.cardRow, styles.cardRowBorder]}>
-                  <Text style={styles.cardLabel}>Data de devolução</Text>
+                  <Text style={styles.cardLabel}>{t('livros.returnDate')}</Text>
                   <Text style={styles.cardValue}>{livro.dataDevolucao}</Text>
                 </View>
                 <View style={[styles.cardRow, styles.cardRowBorder]}>
-                  <Text style={styles.cardLabel}>Status</Text>
+                  <Text style={styles.cardLabel}>{t('livros.status')}</Text>
                   <View style={[styles.statusBadge, { backgroundColor: s.bg, borderColor: s.border }]}>
-                    <Text style={[styles.statusText, { color: s.text }]}>{livro.status}</Text>
+                    <Text style={[styles.statusText, { color: s.text }]}>
+                      {livro.status === 'Emprestado'
+                        ? t('livros.statusBorrowed')
+                        : livro.status === 'Atrasado'
+                          ? t('livros.statusLate')
+                          : t('livros.statusReturned')}
+                    </Text>
                   </View>
                 </View>
               </View>

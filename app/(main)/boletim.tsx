@@ -8,6 +8,7 @@ import Svg, { Path, Circle } from 'react-native-svg';
 import { useApp } from '@/contexts/AppContext';
 import { colors } from '@/constants/colors';
 import BimestreTabs from '@/components/BimestreTabs';
+import { useT } from '@/hooks/useT';
 
 // ─── Dados ───────────────────────────────────────────────
 
@@ -26,48 +27,48 @@ interface MateriaData {
 
 const dadosPorBimestre: Record<'1' | '2' | '3' | '4', MateriaData[]> = {
   '1': [
-    { nome: 'Português',        avaliacoes: [{ nome: 'Prova 1', nota: 8.0, data: '10/03/2025' }, { nome: 'Prova 2', nota: 7.5, data: '28/03/2025' }, { nome: 'Trabalho', nota: 9.0, data: '14/04/2025' }] },
-    { nome: 'Matemática',       avaliacoes: [{ nome: 'Prova 1', nota: 5.0, data: '11/03/2025' }, { nome: 'Prova 2', nota: 0.0, data: '29/03/2025' }, { nome: 'Trabalho', nota: 6.0, data: '15/04/2025' }] },
-    { nome: 'Ciências',         avaliacoes: [{ nome: 'Prova 1', nota: 7.0, data: '12/03/2025' }, { nome: 'Prova 2', nota: 8.0, data: '30/03/2025' }, { nome: 'Trabalho', nota: 7.5, data: '16/04/2025' }] },
-    { nome: 'História',         avaliacoes: [{ nome: 'Prova 1', nota: 9.0, data: '13/03/2025' }, { nome: 'Prova 2', nota: 8.5, data: '31/03/2025' }, { nome: 'Trabalho', nota: 8.0, data: '17/04/2025' }] },
-    { nome: 'Geografia',        avaliacoes: [{ nome: 'Prova 1', nota: 0.0, data: '14/03/2025' }, { nome: 'Prova 2', nota: 5.5, data: '01/04/2025' }, { nome: 'Trabalho', nota: 6.5, data: '18/04/2025' }] },
-    { nome: 'Artes',            avaliacoes: [{ nome: 'Trabalho 1', nota: 9.5, data: '15/03/2025' }, { nome: 'Trabalho 2', nota: 10.0, data: '05/04/2025' }] },
-    { nome: 'Educação Física',  avaliacoes: [{ nome: 'Avaliação Prática', nota: 9.0, data: '17/03/2025' }, { nome: 'Frequência', nota: 10.0, data: '10/04/2025' }] },
-    { nome: 'Inglês',           avaliacoes: [{ nome: 'Prova 1', nota: 0.0, data: '18/03/2025' }, { nome: 'Oral', nota: 7.0, data: '08/04/2025' }, { nome: 'Trabalho', nota: 8.0, data: '20/04/2025' }] },
-    { nome: 'Ensino Religioso', avaliacoes: [{ nome: 'Trabalho 1', nota: 8.5, data: '19/03/2025' }, { nome: 'Trabalho 2', nota: 9.0, data: '09/04/2025' }] },
+    { nome: 'boletim.subj.portugues',        avaliacoes: [{ nome: 'Prova 1', nota: 8.0, data: '10/03/2025' }, { nome: 'Prova 2', nota: 7.5, data: '28/03/2025' }, { nome: 'Trabalho', nota: 9.0, data: '14/04/2025' }] },
+    { nome: 'boletim.subj.matematica',       avaliacoes: [{ nome: 'Prova 1', nota: 5.0, data: '11/03/2025' }, { nome: 'Prova 2', nota: 0.0, data: '29/03/2025' }, { nome: 'Trabalho', nota: 6.0, data: '15/04/2025' }] },
+    { nome: 'boletim.subj.ciencias',         avaliacoes: [{ nome: 'Prova 1', nota: 7.0, data: '12/03/2025' }, { nome: 'Prova 2', nota: 8.0, data: '30/03/2025' }, { nome: 'Trabalho', nota: 7.5, data: '16/04/2025' }] },
+    { nome: 'boletim.subj.historia',         avaliacoes: [{ nome: 'Prova 1', nota: 9.0, data: '13/03/2025' }, { nome: 'Prova 2', nota: 8.5, data: '31/03/2025' }, { nome: 'Trabalho', nota: 8.0, data: '17/04/2025' }] },
+    { nome: 'boletim.subj.geografia',        avaliacoes: [{ nome: 'Prova 1', nota: 0.0, data: '14/03/2025' }, { nome: 'Prova 2', nota: 5.5, data: '01/04/2025' }, { nome: 'Trabalho', nota: 6.5, data: '18/04/2025' }] },
+    { nome: 'boletim.subj.artes',            avaliacoes: [{ nome: 'Trabalho 1', nota: 9.5, data: '15/03/2025' }, { nome: 'Trabalho 2', nota: 10.0, data: '05/04/2025' }] },
+    { nome: 'boletim.subj.edFisica',  avaliacoes: [{ nome: 'Avaliação Prática', nota: 9.0, data: '17/03/2025' }, { nome: 'Frequência', nota: 10.0, data: '10/04/2025' }] },
+    { nome: 'boletim.subj.ingles',           avaliacoes: [{ nome: 'Prova 1', nota: 0.0, data: '18/03/2025' }, { nome: 'Oral', nota: 7.0, data: '08/04/2025' }, { nome: 'Trabalho', nota: 8.0, data: '20/04/2025' }] },
+    { nome: 'boletim.subj.ensReligioso', avaliacoes: [{ nome: 'Trabalho 1', nota: 8.5, data: '19/03/2025' }, { nome: 'Trabalho 2', nota: 9.0, data: '09/04/2025' }] },
   ],
   '2': [
-    { nome: 'Português',        avaliacoes: [{ nome: 'Prova 1', nota: 7.0, data: '05/05/2025' }, { nome: 'Prova 2', nota: 6.5, data: '23/05/2025' }, { nome: 'Trabalho', nota: 8.0, data: '10/06/2025' }] },
-    { nome: 'Matemática',       avaliacoes: [{ nome: 'Prova 1', nota: 4.0, data: '06/05/2025' }, { nome: 'Prova 2', nota: 0.0, data: '24/05/2025' }, { nome: 'Trabalho', nota: 5.0, data: '11/06/2025' }] },
-    { nome: 'Ciências',         avaliacoes: [{ nome: 'Prova 1', nota: 8.5, data: '07/05/2025' }, { nome: 'Prova 2', nota: 7.0, data: '25/05/2025' }, { nome: 'Trabalho', nota: 0.0, data: '12/06/2025' }] },
-    { nome: 'História',         avaliacoes: [{ nome: 'Prova 1', nota: 7.5, data: '08/05/2025' }, { nome: 'Prova 2', nota: 8.0, data: '26/05/2025' }, { nome: 'Trabalho', nota: 7.0, data: '13/06/2025' }] },
-    { nome: 'Geografia',        avaliacoes: [{ nome: 'Prova 1', nota: 5.0, data: '09/05/2025' }, { nome: 'Prova 2', nota: 6.0, data: '27/05/2025' }, { nome: 'Trabalho', nota: 5.5, data: '14/06/2025' }] },
-    { nome: 'Artes',            avaliacoes: [{ nome: 'Trabalho 1', nota: 8.0, data: '10/05/2025' }, { nome: 'Trabalho 2', nota: 0.0, data: '28/05/2025' }] },
-    { nome: 'Educação Física',  avaliacoes: [{ nome: 'Avaliação Prática', nota: 10.0, data: '12/05/2025' }, { nome: 'Frequência', nota: 9.5, data: '02/06/2025' }] },
-    { nome: 'Inglês',           avaliacoes: [{ nome: 'Prova 1', nota: 5.5, data: '13/05/2025' }, { nome: 'Oral', nota: 0.0, data: '03/06/2025' }, { nome: 'Trabalho', nota: 6.0, data: '18/06/2025' }] },
-    { nome: 'Ensino Religioso', avaliacoes: [{ nome: 'Trabalho 1', nota: 9.5, data: '14/05/2025' }, { nome: 'Trabalho 2', nota: 8.0, data: '04/06/2025' }] },
+    { nome: 'boletim.subj.portugues',        avaliacoes: [{ nome: 'Prova 1', nota: 7.0, data: '05/05/2025' }, { nome: 'Prova 2', nota: 6.5, data: '23/05/2025' }, { nome: 'Trabalho', nota: 8.0, data: '10/06/2025' }] },
+    { nome: 'boletim.subj.matematica',       avaliacoes: [{ nome: 'Prova 1', nota: 4.0, data: '06/05/2025' }, { nome: 'Prova 2', nota: 0.0, data: '24/05/2025' }, { nome: 'Trabalho', nota: 5.0, data: '11/06/2025' }] },
+    { nome: 'boletim.subj.ciencias',         avaliacoes: [{ nome: 'Prova 1', nota: 8.5, data: '07/05/2025' }, { nome: 'Prova 2', nota: 7.0, data: '25/05/2025' }, { nome: 'Trabalho', nota: 0.0, data: '12/06/2025' }] },
+    { nome: 'boletim.subj.historia',         avaliacoes: [{ nome: 'Prova 1', nota: 7.5, data: '08/05/2025' }, { nome: 'Prova 2', nota: 8.0, data: '26/05/2025' }, { nome: 'Trabalho', nota: 7.0, data: '13/06/2025' }] },
+    { nome: 'boletim.subj.geografia',        avaliacoes: [{ nome: 'Prova 1', nota: 5.0, data: '09/05/2025' }, { nome: 'Prova 2', nota: 6.0, data: '27/05/2025' }, { nome: 'Trabalho', nota: 5.5, data: '14/06/2025' }] },
+    { nome: 'boletim.subj.artes',            avaliacoes: [{ nome: 'Trabalho 1', nota: 8.0, data: '10/05/2025' }, { nome: 'Trabalho 2', nota: 0.0, data: '28/05/2025' }] },
+    { nome: 'boletim.subj.edFisica',  avaliacoes: [{ nome: 'Avaliação Prática', nota: 10.0, data: '12/05/2025' }, { nome: 'Frequência', nota: 9.5, data: '02/06/2025' }] },
+    { nome: 'boletim.subj.ingles',           avaliacoes: [{ nome: 'Prova 1', nota: 5.5, data: '13/05/2025' }, { nome: 'Oral', nota: 0.0, data: '03/06/2025' }, { nome: 'Trabalho', nota: 6.0, data: '18/06/2025' }] },
+    { nome: 'boletim.subj.ensReligioso', avaliacoes: [{ nome: 'Trabalho 1', nota: 9.5, data: '14/05/2025' }, { nome: 'Trabalho 2', nota: 8.0, data: '04/06/2025' }] },
   ],
   '3': [
-    { nome: 'Português',        avaliacoes: [{ nome: 'Prova 1', nota: 7.5, data: '04/08/2025' }, { nome: 'Prova 2', nota: 0.0, data: '22/08/2025' }, { nome: 'Trabalho', nota: 7.0, data: '05/09/2025' }] },
-    { nome: 'Matemática',       avaliacoes: [{ nome: 'Prova 1', nota: 6.0, data: '05/08/2025' }, { nome: 'Prova 2', nota: 6.5, data: '23/08/2025' }, { nome: 'Trabalho', nota: 7.0, data: '06/09/2025' }] },
-    { nome: 'Ciências',         avaliacoes: [{ nome: 'Prova 1', nota: 9.0, data: '06/08/2025' }, { nome: 'Prova 2', nota: 8.5, data: '24/08/2025' }, { nome: 'Trabalho', nota: 9.5, data: '07/09/2025' }] },
-    { nome: 'História',         avaliacoes: [{ nome: 'Prova 1', nota: 0.0, data: '07/08/2025' }, { nome: 'Prova 2', nota: 7.5, data: '25/08/2025' }, { nome: 'Trabalho', nota: 8.5, data: '08/09/2025' }] },
-    { nome: 'Geografia',        avaliacoes: [{ nome: 'Prova 1', nota: 7.0, data: '08/08/2025' }, { nome: 'Prova 2', nota: 6.5, data: '26/08/2025' }, { nome: 'Trabalho', nota: 0.0, data: '09/09/2025' }] },
-    { nome: 'Artes',            avaliacoes: [{ nome: 'Trabalho 1', nota: 10.0, data: '09/08/2025' }, { nome: 'Trabalho 2', nota: 9.5, data: '27/08/2025' }] },
-    { nome: 'Educação Física',  avaliacoes: [{ nome: 'Avaliação Prática', nota: 9.5, data: '11/08/2025' }, { nome: 'Frequência', nota: 10.0, data: '01/09/2025' }] },
-    { nome: 'Inglês',           avaliacoes: [{ nome: 'Prova 1', nota: 7.0, data: '12/08/2025' }, { nome: 'Oral', nota: 8.0, data: '02/09/2025' }, { nome: 'Trabalho', nota: 0.0, data: '15/09/2025' }] },
-    { nome: 'Ensino Religioso', avaliacoes: [{ nome: 'Trabalho 1', nota: 9.0, data: '13/08/2025' }, { nome: 'Trabalho 2', nota: 9.5, data: '03/09/2025' }] },
+    { nome: 'boletim.subj.portugues',        avaliacoes: [{ nome: 'Prova 1', nota: 7.5, data: '04/08/2025' }, { nome: 'Prova 2', nota: 0.0, data: '22/08/2025' }, { nome: 'Trabalho', nota: 7.0, data: '05/09/2025' }] },
+    { nome: 'boletim.subj.matematica',       avaliacoes: [{ nome: 'Prova 1', nota: 6.0, data: '05/08/2025' }, { nome: 'Prova 2', nota: 6.5, data: '23/08/2025' }, { nome: 'Trabalho', nota: 7.0, data: '06/09/2025' }] },
+    { nome: 'boletim.subj.ciencias',         avaliacoes: [{ nome: 'Prova 1', nota: 9.0, data: '06/08/2025' }, { nome: 'Prova 2', nota: 8.5, data: '24/08/2025' }, { nome: 'Trabalho', nota: 9.5, data: '07/09/2025' }] },
+    { nome: 'boletim.subj.historia',         avaliacoes: [{ nome: 'Prova 1', nota: 0.0, data: '07/08/2025' }, { nome: 'Prova 2', nota: 7.5, data: '25/08/2025' }, { nome: 'Trabalho', nota: 8.5, data: '08/09/2025' }] },
+    { nome: 'boletim.subj.geografia',        avaliacoes: [{ nome: 'Prova 1', nota: 7.0, data: '08/08/2025' }, { nome: 'Prova 2', nota: 6.5, data: '26/08/2025' }, { nome: 'Trabalho', nota: 0.0, data: '09/09/2025' }] },
+    { nome: 'boletim.subj.artes',            avaliacoes: [{ nome: 'Trabalho 1', nota: 10.0, data: '09/08/2025' }, { nome: 'Trabalho 2', nota: 9.5, data: '27/08/2025' }] },
+    { nome: 'boletim.subj.edFisica',  avaliacoes: [{ nome: 'Avaliação Prática', nota: 9.5, data: '11/08/2025' }, { nome: 'Frequência', nota: 10.0, data: '01/09/2025' }] },
+    { nome: 'boletim.subj.ingles',           avaliacoes: [{ nome: 'Prova 1', nota: 7.0, data: '12/08/2025' }, { nome: 'Oral', nota: 8.0, data: '02/09/2025' }, { nome: 'Trabalho', nota: 0.0, data: '15/09/2025' }] },
+    { nome: 'boletim.subj.ensReligioso', avaliacoes: [{ nome: 'Trabalho 1', nota: 9.0, data: '13/08/2025' }, { nome: 'Trabalho 2', nota: 9.5, data: '03/09/2025' }] },
   ],
   '4': [
-    { nome: 'Português',        avaliacoes: [{ nome: 'Prova 1', nota: 8.5, data: '06/10/2025' }, { nome: 'Prova 2', nota: 9.0, data: '24/10/2025' }, { nome: 'Trabalho', nota: 8.0, data: '10/11/2025' }] },
-    { nome: 'Matemática',       avaliacoes: [{ nome: 'Prova 1', nota: 0.0, data: '07/10/2025' }, { nome: 'Prova 2', nota: 7.5, data: '25/10/2025' }, { nome: 'Trabalho', nota: 6.5, data: '11/11/2025' }] },
-    { nome: 'Ciências',         avaliacoes: [{ nome: 'Prova 1', nota: 8.0, data: '08/10/2025' }, { nome: 'Prova 2', nota: 9.5, data: '26/10/2025' }, { nome: 'Trabalho', nota: 8.5, data: '12/11/2025' }] },
-    { nome: 'História',         avaliacoes: [{ nome: 'Prova 1', nota: 9.5, data: '09/10/2025' }, { nome: 'Prova 2', nota: 9.0, data: '27/10/2025' }, { nome: 'Trabalho', nota: 10.0, data: '13/11/2025' }] },
-    { nome: 'Geografia',        avaliacoes: [{ nome: 'Prova 1', nota: 7.5, data: '10/10/2025' }, { nome: 'Prova 2', nota: 0.0, data: '28/10/2025' }, { nome: 'Trabalho', nota: 7.0, data: '14/11/2025' }] },
-    { nome: 'Artes',            avaliacoes: [{ nome: 'Trabalho 1', nota: 10.0, data: '11/10/2025' }, { nome: 'Trabalho 2', nota: 9.5, data: '29/10/2025' }] },
-    { nome: 'Educação Física',  avaliacoes: [{ nome: 'Avaliação Prática', nota: 10.0, data: '13/10/2025' }, { nome: 'Frequência', nota: 10.0, data: '03/11/2025' }] },
-    { nome: 'Inglês',           avaliacoes: [{ nome: 'Prova 1', nota: 8.0, data: '14/10/2025' }, { nome: 'Oral', nota: 0.0, data: '04/11/2025' }, { nome: 'Trabalho', nota: 9.0, data: '18/11/2025' }] },
-    { nome: 'Ensino Religioso', avaliacoes: [{ nome: 'Trabalho 1', nota: 9.5, data: '15/10/2025' }, { nome: 'Trabalho 2', nota: 10.0, data: '05/11/2025' }] },
+    { nome: 'boletim.subj.portugues',        avaliacoes: [{ nome: 'Prova 1', nota: 8.5, data: '06/10/2025' }, { nome: 'Prova 2', nota: 9.0, data: '24/10/2025' }, { nome: 'Trabalho', nota: 8.0, data: '10/11/2025' }] },
+    { nome: 'boletim.subj.matematica',       avaliacoes: [{ nome: 'Prova 1', nota: 0.0, data: '07/10/2025' }, { nome: 'Prova 2', nota: 7.5, data: '25/10/2025' }, { nome: 'Trabalho', nota: 6.5, data: '11/11/2025' }] },
+    { nome: 'boletim.subj.ciencias',         avaliacoes: [{ nome: 'Prova 1', nota: 8.0, data: '08/10/2025' }, { nome: 'Prova 2', nota: 9.5, data: '26/10/2025' }, { nome: 'Trabalho', nota: 8.5, data: '12/11/2025' }] },
+    { nome: 'boletim.subj.historia',         avaliacoes: [{ nome: 'Prova 1', nota: 9.5, data: '09/10/2025' }, { nome: 'Prova 2', nota: 9.0, data: '27/10/2025' }, { nome: 'Trabalho', nota: 10.0, data: '13/11/2025' }] },
+    { nome: 'boletim.subj.geografia',        avaliacoes: [{ nome: 'Prova 1', nota: 7.5, data: '10/10/2025' }, { nome: 'Prova 2', nota: 0.0, data: '28/10/2025' }, { nome: 'Trabalho', nota: 7.0, data: '14/11/2025' }] },
+    { nome: 'boletim.subj.artes',            avaliacoes: [{ nome: 'Trabalho 1', nota: 10.0, data: '11/10/2025' }, { nome: 'Trabalho 2', nota: 9.5, data: '29/10/2025' }] },
+    { nome: 'boletim.subj.edFisica',  avaliacoes: [{ nome: 'Avaliação Prática', nota: 10.0, data: '13/10/2025' }, { nome: 'Frequência', nota: 10.0, data: '03/11/2025' }] },
+    { nome: 'boletim.subj.ingles',           avaliacoes: [{ nome: 'Prova 1', nota: 8.0, data: '14/10/2025' }, { nome: 'Oral', nota: 0.0, data: '04/11/2025' }, { nome: 'Trabalho', nota: 9.0, data: '18/11/2025' }] },
+    { nome: 'boletim.subj.ensReligioso', avaliacoes: [{ nome: 'Trabalho 1', nota: 9.5, data: '15/10/2025' }, { nome: 'Trabalho 2', nota: 10.0, data: '05/11/2025' }] },
   ],
 };
 
@@ -120,6 +121,7 @@ function NotaBadge({ nota, style }: { nota: number; style?: object }) {
 // ─── Tela Principal ───────────────────────────────────────
 
 export default function BoletimScreen() {
+  const t = useT();
   const { nome } = useLocalSearchParams<{ nome: string }>();
   const { setDisplayName, setHideHeader } = useApp();
 
@@ -167,7 +169,7 @@ export default function BoletimScreen() {
               <Path d="M19 12H5M5 12L12 19M5 12L12 5" stroke={colors.gray[400]} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
             </Svg>
           </TouchableOpacity>
-          <Text style={styles.detalhesTitle}>Avaliações</Text>
+          <Text style={styles.detalhesTitle}>{t('boletim.assessments')}</Text>
           <View style={{ width: 32 }} />
         </View>
 
@@ -177,7 +179,7 @@ export default function BoletimScreen() {
           <ScrollView contentContainerStyle={{ paddingBottom: 16 }}>
             {/* Badges */}
             <View style={styles.badgesRow}>
-              <View style={styles.greenBadge}><Text style={styles.greenBadgeText}>{materiaDetalhes}</Text></View>
+              <View style={styles.greenBadge}><Text style={styles.greenBadgeText}>{t(materiaDetalhes)}</Text></View>
               <View style={styles.greenBadge}>
                 <Text style={styles.greenBadgeText}>
                   {bimestre === 'final' ? 'Final' : `${bimestre}º bimestre`}
@@ -189,9 +191,9 @@ export default function BoletimScreen() {
             <View style={styles.table}>
               {/* Header */}
               <View style={[styles.tableRow, styles.tableHeaderRow]}>
-                <Text style={[styles.tableHeaderText, { flex: 1 }]}>Avaliações</Text>
-                <Text style={[styles.tableHeaderText, { width: 100, textAlign: 'center' }]}>Nota</Text>
-                <Text style={[styles.tableHeaderText, { width: 64, textAlign: 'center' }]}>Ação</Text>
+                <Text style={[styles.tableHeaderText, { flex: 1 }]}>{t('boletim.assessments')}</Text>
+                <Text style={[styles.tableHeaderText, { width: 100, textAlign: 'center' }]}>{t('boletim.grade')}</Text>
+                <Text style={[styles.tableHeaderText, { width: 64, textAlign: 'center' }]}>{t('boletim.action')}</Text>
               </View>
 
               {avaliacoesDaMateria.map((av, idx) => (
@@ -213,7 +215,7 @@ export default function BoletimScreen() {
 
               {/* Linha de média */}
               <View style={[styles.tableRow, styles.mediaRow]}>
-                <Text style={[styles.tableCell, { flex: 1, fontWeight: '700' }]}>Média</Text>
+                <Text style={[styles.tableCell, { flex: 1, fontWeight: '700' }]}>{t('boletim.average')}</Text>
                 <View style={{ width: 100, alignItems: 'center' }}>
                   <NotaBadge nota={calcMedia(avaliacoesDaMateria)} style={{ width: 44 }} />
                 </View>
@@ -233,7 +235,7 @@ export default function BoletimScreen() {
               <View style={styles.sheetHandle} />
               <View style={styles.sheetHeader}>
                 <Text style={styles.sheetTitle}>
-                  {bimestre === 'final' ? 'Detalhes da Média' : 'Detalhes da avaliação'}
+                  {bimestre === 'final' ? t('boletim.averageDetails') : t('boletim.assessmentDetails')}
                 </Text>
                 <TouchableOpacity onPress={closeSheet} style={styles.closeBtn}>
                   <Svg width={24} height={24} viewBox="0 0 24 24" fill="none">
@@ -243,11 +245,11 @@ export default function BoletimScreen() {
               </View>
               <View style={styles.sheetBody}>
                 {[
-                  { label: 'Matéria', value: materiaDetalhes },
-                  { label: 'Período', value: bimestre === 'final' ? 'Final' : `${bimestre}º bimestre` },
-                  { label: 'Professor', value: 'Prof. Carlos Silva' },
-                  { label: 'Nome da avaliação', value: avaliacaoSheet.nome },
-                  { label: 'Data da avaliação', value: avaliacaoSheet.data },
+                  { label: t('boletim.subject2'), value: t(materiaDetalhes) },
+                  { label: t('boletim.period'), value: bimestre === 'final' ? t('boletim.final') : `${bimestre}º bimestre` },
+                  { label: t('boletim.teacher'), value: 'Prof. Carlos Silva' },
+                  { label: t('boletim.assessmentName'), value: avaliacaoSheet.nome },
+                  { label: t('boletim.assessmentDate'), value: avaliacaoSheet.data },
                 ].map(({ label, value }) => (
                   <View key={label} style={styles.sheetField}>
                     <Text style={styles.sheetFieldLabel}>{label}</Text>
@@ -255,13 +257,13 @@ export default function BoletimScreen() {
                   </View>
                 ))}
                 <View style={styles.sheetField}>
-                  <Text style={styles.sheetFieldLabel}>Nota da avaliação</Text>
+                  <Text style={styles.sheetFieldLabel}>{t('boletim.assessmentGrade')}</Text>
                   <NotaBadge nota={avaliacaoSheet.nota} />
                 </View>
                 <View style={[styles.sheetField, { width: '100%' }]}>
-                  <Text style={styles.sheetFieldLabel}>Observação</Text>
+                  <Text style={styles.sheetFieldLabel}>{t('boletim.observation')}</Text>
                   <Text style={styles.sheetFieldObs}>
-                    O aluno tem apresentado um bom desenvolvimento na disciplina, demonstrando progresso consistente ao longo do período.
+                    {t('boletim.obsText')}
                   </Text>
                 </View>
               </View>
@@ -282,9 +284,9 @@ export default function BoletimScreen() {
       <View style={styles.tableWrapper}>
         {/* Header da tabela */}
         <View style={[styles.tableRow, styles.tableHeaderRow]}>
-          <Text style={[styles.tableHeaderText, { flex: 1 }]}>Disciplina</Text>
-          <Text style={[styles.tableHeaderText, { width: 120, textAlign: 'center' }]}>Média</Text>
-          <Text style={[styles.tableHeaderText, { width: 56, textAlign: 'center' }]}>Ação</Text>
+          <Text style={[styles.tableHeaderText, { flex: 1 }]}>{t('boletim.subject')}</Text>
+          <Text style={[styles.tableHeaderText, { width: 120, textAlign: 'center' }]}>{t('boletim.average')}</Text>
+          <Text style={[styles.tableHeaderText, { width: 56, textAlign: 'center' }]}>{t('boletim.action')}</Text>
         </View>
 
         <FlatList
@@ -295,7 +297,7 @@ export default function BoletimScreen() {
             const media = calcMedia(item.avaliacoes);
             return (
               <View style={[styles.tableRow, styles.tableBodyRow]}>
-                <Text style={[styles.tableCell, { flex: 1 }]}>{item.nome}</Text>
+                <Text style={[styles.tableCell, { flex: 1 }]}>{t(item.nome)}</Text>
                 <View style={{ width: 120, alignItems: 'center' }}>
                   <NotaBadge nota={media} style={{ paddingHorizontal: 0, minWidth: 44 }} />
                 </View>

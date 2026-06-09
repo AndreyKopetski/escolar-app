@@ -18,7 +18,11 @@ const DEFAULT_STUDENT: Aluno = {
   foto: require('@/assets/images/avatar-thomas.jpg'),
 };
 
+export type UserRole = 'responsavel' | 'gestor' | 'equipe' | null;
+
 type AppContextType = {
+  userRole: UserRole;
+  setUserRole: (role: UserRole) => void;
   displayName: string;
   setDisplayName: (name: string) => void;
   userEmail: string;
@@ -33,11 +37,20 @@ type AppContextType = {
   setHideHeader: (v: boolean) => void;
   isProfileSheetVisible: boolean;
   setProfileSheetVisible: (v: boolean) => void;
+  profilePhoto: number | null;
+  setProfilePhoto: (photo: number | null) => void;
+  language: 'es' | 'pt' | 'en';
+  setLanguage: (lang: 'es' | 'pt' | 'en') => void;
+  hasBiometric: boolean;
+  setHasBiometric: (v: boolean) => void;
+  unreadNotificationsCount: number;
+  setUnreadNotificationsCount: (n: number) => void;
 };
 
 const AppContext = createContext<AppContextType | null>(null);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
+  const [userRole, setUserRole] = useState<UserRole>(null);
   const [displayName, setDisplayName] = useState('Usuário');
   const [userEmail, setUserEmail] = useState('');
   const [activeStudent, setActiveStudent] = useState<Aluno>(DEFAULT_STUDENT);
@@ -45,9 +58,14 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [isStudentSheetVisible, setStudentSheetVisible] = useState(false);
   const [hideHeader, setHideHeader] = useState(false);
   const [isProfileSheetVisible, setProfileSheetVisible] = useState(false);
+  const [hasBiometric, setHasBiometric] = useState(true);
+  const [unreadNotificationsCount, setUnreadNotificationsCount] = useState(4);
+  const [profilePhoto, setProfilePhoto] = useState<number | null>(null);
+  const [language, setLanguage] = useState<'es' | 'pt' | 'en'>('es');
 
   return (
     <AppContext.Provider value={{
+      userRole, setUserRole,
       displayName, setDisplayName,
       userEmail, setUserEmail,
       activeStudent, setActiveStudent,
@@ -55,6 +73,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       isStudentSheetVisible, setStudentSheetVisible,
       hideHeader, setHideHeader,
       isProfileSheetVisible, setProfileSheetVisible,
+      profilePhoto, setProfilePhoto,
+      language, setLanguage,
+      hasBiometric, setHasBiometric,
+      unreadNotificationsCount, setUnreadNotificationsCount,
     }}>
       {children}
     </AppContext.Provider>

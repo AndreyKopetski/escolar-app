@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { colors } from '@/constants/colors';
 import BimestreTabs from '@/components/BimestreTabs';
+import { useT } from '@/hooks/useT';
 
 // ─── Types ────────────────────────────────────────────────
 
@@ -16,39 +17,39 @@ interface Aula {
 
 const aulasPorDia: Record<DiaSemana, Aula[]> = {
   seg: [
-    { horario: '07:00', materia: 'Português'},
-    { horario: '08:00', materia: 'Matemática' },
-    { horario: '09:00', materia: 'Ciências' },
-    { horario: '10:00', materia: 'História' },
-    { horario: '11:00', materia: 'Geografia' },
+    { horario: '07:00', materia: 'boletim.subj.portugues'},
+    { horario: '08:00', materia: 'boletim.subj.matematica' },
+    { horario: '09:00', materia: 'boletim.subj.ciencias' },
+    { horario: '10:00', materia: 'boletim.subj.historia' },
+    { horario: '11:00', materia: 'boletim.subj.geografia' },
   ],
   ter: [
-    { horario: '07:00', materia: 'Matemática' },
-    { horario: '08:00', materia: 'Inglês' },
-    { horario: '09:00', materia: 'Artes' },
-    { horario: '10:00', materia: 'Educação Física' },
-    { horario: '11:00', materia: 'Ensino Religioso' },
+    { horario: '07:00', materia: 'boletim.subj.matematica' },
+    { horario: '08:00', materia: 'boletim.subj.ingles' },
+    { horario: '09:00', materia: 'boletim.subj.artes' },
+    { horario: '10:00', materia: 'boletim.subj.edFisica' },
+    { horario: '11:00', materia: 'boletim.subj.ensReligioso' },
   ],
   qua: [
-    { horario: '07:00', materia: 'Ciências' },
-    { horario: '08:00', materia: 'Português' },
-    { horario: '09:00', materia: 'História' },
-    { horario: '10:00', materia: 'Matemática' },
-    { horario: '11:00', materia: 'Inglês' },
+    { horario: '07:00', materia: 'boletim.subj.ciencias' },
+    { horario: '08:00', materia: 'boletim.subj.portugues' },
+    { horario: '09:00', materia: 'boletim.subj.historia' },
+    { horario: '10:00', materia: 'boletim.subj.matematica' },
+    { horario: '11:00', materia: 'boletim.subj.ingles' },
   ],
   qui: [
-    { horario: '07:00', materia: 'História' },
-    { horario: '08:00', materia: 'Geografia' },
-    { horario: '09:00', materia: 'Português' },
-    { horario: '10:00', materia: 'Artes' },
-    { horario: '11:00', materia: 'Ciências' },
+    { horario: '07:00', materia: 'boletim.subj.historia' },
+    { horario: '08:00', materia: 'boletim.subj.geografia' },
+    { horario: '09:00', materia: 'boletim.subj.portugues' },
+    { horario: '10:00', materia: 'boletim.subj.artes' },
+    { horario: '11:00', materia: 'boletim.subj.ciencias' },
   ],
   sex: [
-    { horario: '07:00', materia: 'Inglês' },
-    { horario: '08:00', materia: 'Educação Física' },
-    { horario: '09:00', materia: 'Matemática' },
-    { horario: '10:00', materia: 'Ensino Religioso' },
-    { horario: '11:00', materia: 'Português' },
+    { horario: '07:00', materia: 'boletim.subj.ingles' },
+    { horario: '08:00', materia: 'boletim.subj.edFisica' },
+    { horario: '09:00', materia: 'boletim.subj.matematica' },
+    { horario: '10:00', materia: 'boletim.subj.ensReligioso' },
+    { horario: '11:00', materia: 'boletim.subj.portugues' },
   ],
 };
 
@@ -63,6 +64,7 @@ const DIAS_TABS: { key: DiaSemana; label: string }[] = [
 // ─── Tela ────────────────────────────────────────────────
 
 export default function AulasScreen() {
+  const t = useT();
   const [dia, setDia] = useState<DiaSemana>('seg');
   const aulas = aulasPorDia[dia];
 
@@ -72,8 +74,8 @@ export default function AulasScreen() {
 
       <View style={styles.tableWrapper}>
         <View style={[styles.tableRow, styles.tableHeaderRow]}>
-          <Text style={[styles.tableHeaderText, { width: 100 }]}>Horário</Text>
-          <Text style={[styles.tableHeaderText, { flex: 1 }]}>Aula</Text>
+          <Text style={[styles.tableHeaderText, { width: 100 }]}>{t('agenda.time')}</Text>
+          <Text style={[styles.tableHeaderText, { flex: 1 }]}>{t('agenda.class')}</Text>
         </View>
 
         <FlatList
@@ -87,7 +89,7 @@ export default function AulasScreen() {
                   <Text style={styles.horarioText}>{item.horario}</Text>
                 </View>
               </View>
-              <Text style={[styles.tableCell, { flex: 1 }]}>{item.materia}</Text>
+              <Text style={[styles.tableCell, { flex: 1 }]}>{t(item.materia)}</Text>
             </View>
           )}
         />

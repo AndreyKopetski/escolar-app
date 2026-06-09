@@ -19,6 +19,7 @@ import AppLogo from '@/components/AppLogo';
 import Button from '@/components/Button';
 import { useApp } from '@/contexts/AppContext';
 import { colors } from '@/constants/colors';
+import { useT } from '@/hooks/useT';
 
 const PROVEDORES = ['@gmail.com', '@hotmail.com', '@outlook.com'];
 const TLDS = ['.com', '.com.br'];
@@ -29,10 +30,12 @@ const DOT_SPACING = 23;
 
 export default function LoginScreen() {
   const router = useRouter();
-  const { setUserEmail } = useApp();
+  const { setUserEmail, setUserRole, setDisplayName } = useApp();
+  const t = useT();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [loginError, setLoginError] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [emailFocused, setEmailFocused] = useState(false);
   const toggleAnim = useRef(new Animated.Value(0)).current;
@@ -55,9 +58,37 @@ export default function LoginScreen() {
   });
 
   function handleLogin() {
-    const nomeUsuario = email.includes('@') ? email.split('@')[0] : email;
-    setUserEmail(email || 'contato@gmail.com.br');
-    router.replace({ pathname: '/(main)/boletim', params: { nome: nomeUsuario } });
+    const trimmed  = email.trim().toLowerCase();
+    const localPart = trimmed.split('@')[0];
+    const hasValidDomain = trimmed.includes('@') && trimmed.split('@')[1]?.includes('.');
+    setLoginError('');
+
+    if (!hasValidDomain) {
+      setLoginError(t('login.error'));
+      return;
+    }
+
+    if (localPart === 'gestor') {
+      setUserRole('gestor');
+      setUserEmail(trimmed);
+      setDisplayName('Maria Silva');
+      router.replace('/(gestor)/dashboard');
+    } else if (localPart === 'professor') {
+      setUserRole('gestor');
+      setUserEmail(trimmed);
+      setDisplayName('Professor(a)');
+      router.replace('/(gestor)/dashboard');
+    } else if (localPart === 'equipe') {
+      setUserRole('equipe');
+      setUserEmail(trimmed);
+      setDisplayName('Equipe');
+      router.replace('/(equipe)/inicio');
+    } else {
+      setUserRole('responsavel');
+      setUserEmail(trimmed);
+      setDisplayName('Carla');
+      router.replace({ pathname: '/(main)/boletim', params: { nome: 'Carla' } });
+    }
   }
 
   const localPart = email.includes('@') ? email.split('@')[0] : email;
@@ -118,8 +149,8 @@ export default function LoginScreen() {
 
             {/* Título */}
             <View style={styles.titleGroup}>
-              <Text style={styles.title}>👋 Bem-vindo de volta!</Text>
-              <Text style={styles.subtitle}>Informe seu e-mail e senha para acessar:</Text>
+              <Text style={styles.title}>{t('login.welcome')}</Text>
+              <Text style={styles.subtitle}>{t('login.subtitle')}</Text>
             </View>
 
             {/* Formulário */}
@@ -127,12 +158,12 @@ export default function LoginScreen() {
 
               {/* Email */}
               <View style={styles.fieldGroup}>
-                <Text style={styles.label}>Email</Text>
+                <Text style={styles.label}>{t('login.email')}</Text>
                 <View style={[styles.inputWrapper, emailFocused && styles.inputWrapperFocused]}>
                   <TextInput
                     ref={inputRef}
                     style={styles.input}
-                    placeholder="Digite seu email"
+                    placeholder={t('login.emailPlaceholder')}
                     placeholderTextColor={colors.gray[500]}
                     value={email}
                     onChangeText={setEmail}
@@ -194,7 +225,7 @@ export default function LoginScreen() {
 
               {/* Senha */}
               <View style={styles.fieldGroup}>
-                <Text style={styles.label}>Senha</Text>
+                <Text style={styles.label}>{t('login.password')}</Text>
                 <View style={styles.inputWrapper}>
                   <TextInput
                     style={styles.inputFlex}
@@ -225,6 +256,16 @@ export default function LoginScreen() {
                 </View>
               </View>
 
+              {loginError !== '' && (
+                <View style={styles.errorBox}>
+                  <Svg width={16} height={16} viewBox="0 0 24 24" fill="none">
+                    <Circle cx="12" cy="12" r="9" stroke={colors.error[500]} strokeWidth="2" />
+                    <Path d="M12 8v4M12 16h.01" stroke={colors.error[500]} strokeWidth="2" strokeLinecap="round" />
+                  </Svg>
+                  <Text style={styles.errorText}>{loginError}</Text>
+                </View>
+              )}
+
               {/* Esqueci + Lembrar */}
               <View style={styles.extras}>
                 <View style={styles.rememberRow}>
@@ -237,15 +278,15 @@ export default function LoginScreen() {
                       style={[styles.toggleThumb, { transform: [{ translateX: thumbTranslate }] }]}
                     />
                   </TouchableOpacity>
-                  <Text style={styles.rememberText}>Lembrar</Text>
+                  <Text style={styles.rememberText}>{t('login.remember')}</Text>
                 </View>
 
-                <Button label="Esqueci minha senha" variant="link" onPress={() => {}} />
+                <Button label={t('login.forgotPassword')} variant="link" onPress={() => {}} />
               </View>
 
               {/* Botão Entrar */}
               <Button
-                label="Entrar"
+                label={t('login.enter')}
                 size="xl"
                 fullWidth
                 onPress={handleLogin}
@@ -267,8 +308,8 @@ export default function LoginScreen() {
 
           {/* Cadastro */}
           <View style={styles.cadastroRow}>
-            <Text style={styles.cadastroText}>Ainda não possui conta?</Text>
-            <Button label="Cadastre-se" variant="link" onPress={() => {}} />
+            <Text style={styles.cadastroText}>{t('login.noAccount')}</Text>
+            <Button label={t('login.register')} variant="link" onPress={() => {}} />
           </View>
 
         </ScrollView>
@@ -434,5 +475,22 @@ const styles = StyleSheet.create({
   cadastroText: {
     fontSize: 14,
     color: colors.gray[500],
+  },
+  errorBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    backgroundColor: colors.error[50],
+    borderWidth: 1,
+    borderColor: colors.error[200],
+    borderRadius: 8,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+  },
+  errorText: {
+    flex: 1,
+    fontSize: 13,
+    color: colors.error[700],
+    lineHeight: 18,
   },
 });

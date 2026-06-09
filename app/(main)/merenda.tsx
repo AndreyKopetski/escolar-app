@@ -6,6 +6,7 @@ import Svg, { Path, Circle } from 'react-native-svg';
 import { useApp } from '@/contexts/AppContext';
 import Button from '@/components/Button';
 import { colors } from '@/constants/colors';
+import { useT } from '@/hooks/useT';
 
 // ─── Types ────────────────────────────────────────────────
 
@@ -13,23 +14,23 @@ type TabDetalhe = 'cardapio' | 'nutricional';
 type ViewState = 'home' | 'detalhe';
 
 interface ItemCardapio {
-  nome: string;
+  nomeKey: string;
   quantidade: number;
-  unidade: string;
+  unidadeKey: string;
 }
 
 interface ValorNutricional {
-  nome: string;
+  nomeKey: string;
   quantidade: number;
 }
 
 interface Merenda {
   id: string;
-  periodo: string;
+  periodoKey: string;
   dataInicio: string;
   dataTermino: string;
-  tipoRefeicao: string;
-  turno: string;
+  tipoRefeicaoKey: string;
+  turnoKey: string;
   dias: string[];
   cardapio: ItemCardapio[];
   valoresNutricionais: ValorNutricional[];
@@ -40,43 +41,43 @@ interface Merenda {
 const merendas: Merenda[] = [
   {
     id: '1',
-    periodo: 'Fevereiro/Março',
+    periodoKey: 'merenda.period1',
     dataInicio: '05/02/2025',
     dataTermino: '05/03/2025',
-    tipoRefeicao: 'Almoço',
-    turno: 'Vespertino',
+    tipoRefeicaoKey: 'merenda.lunch',
+    turnoKey: 'merenda.afternoon',
     dias: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex'],
     cardapio: [
-      { nome: 'Arroz', quantidade: 50, unidade: 'Gramas' },
-      { nome: 'Feijão', quantidade: 30, unidade: 'Gramas' },
-      { nome: 'Frango', quantidade: 40, unidade: 'Gramas' },
-      { nome: 'Salada de Tomate', quantidade: 10, unidade: 'Gramas' },
+      { nomeKey: 'merenda.foodRice', quantidade: 50, unidadeKey: 'merenda.grams' },
+      { nomeKey: 'merenda.foodBeans', quantidade: 30, unidadeKey: 'merenda.grams' },
+      { nomeKey: 'merenda.foodChicken', quantidade: 40, unidadeKey: 'merenda.grams' },
+      { nomeKey: 'merenda.foodTomatoSalad', quantidade: 10, unidadeKey: 'merenda.grams' },
     ],
     valoresNutricionais: [
-      { nome: 'Calorias (kcal)', quantidade: 10 },
-      { nome: 'Proteínas (g)', quantidade: 10 },
-      { nome: 'Lipídios (g)', quantidade: 10 },
-      { nome: 'Fibras (g)', quantidade: 10 },
+      { nomeKey: 'merenda.nutriCalories', quantidade: 10 },
+      { nomeKey: 'merenda.nutriProteins', quantidade: 10 },
+      { nomeKey: 'merenda.nutriLipids', quantidade: 10 },
+      { nomeKey: 'merenda.nutriFibers', quantidade: 10 },
     ],
   },
   {
     id: '2',
-    periodo: 'Abril/Maio',
+    periodoKey: 'merenda.period2',
     dataInicio: '05/02/2025',
     dataTermino: '05/03/2025',
-    tipoRefeicao: 'Almoço',
-    turno: 'Vespertino',
+    tipoRefeicaoKey: 'merenda.lunch',
+    turnoKey: 'merenda.afternoon',
     dias: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex'],
     cardapio: [
-      { nome: 'Macarrão', quantidade: 60, unidade: 'Gramas' },
-      { nome: 'Carne Moída', quantidade: 35, unidade: 'Gramas' },
-      { nome: 'Legumes', quantidade: 20, unidade: 'Gramas' },
+      { nomeKey: 'merenda.foodPasta', quantidade: 60, unidadeKey: 'merenda.grams' },
+      { nomeKey: 'merenda.foodGroundBeef', quantidade: 35, unidadeKey: 'merenda.grams' },
+      { nomeKey: 'merenda.foodVegetables', quantidade: 20, unidadeKey: 'merenda.grams' },
     ],
     valoresNutricionais: [
-      { nome: 'Calorias (kcal)', quantidade: 12 },
-      { nome: 'Proteínas (g)', quantidade: 8 },
-      { nome: 'Lipídios (g)', quantidade: 5 },
-      { nome: 'Fibras (g)', quantidade: 7 },
+      { nomeKey: 'merenda.nutriCalories', quantidade: 12 },
+      { nomeKey: 'merenda.nutriProteins', quantidade: 8 },
+      { nomeKey: 'merenda.nutriLipids', quantidade: 5 },
+      { nomeKey: 'merenda.nutriFibers', quantidade: 7 },
     ],
   },
 ];
@@ -89,9 +90,18 @@ const DIA_COLORS: Record<string, { bg: string; border: string; text: string }> =
   Sex: { bg: colors.success[50], border: colors.success[200], text: colors.success[700] },
 };
 
+const DIA_KEYS: Record<string, string> = {
+  Seg: 'common.daySeg',
+  Ter: 'common.dayTer',
+  Qua: 'common.dayQua',
+  Qui: 'common.dayQui',
+  Sex: 'common.daySex',
+};
+
 // ─── Tela ────────────────────────────────────────────────
 
 export default function MerendaScreen() {
+  const t = useT();
   const { setHideHeader } = useApp();
   const [viewState, setViewState] = useState<ViewState>('home');
   const [selected, setSelected] = useState<Merenda | null>(null);
@@ -117,7 +127,7 @@ export default function MerendaScreen() {
               <Path d="M19 12H5M5 12L12 19M5 12L12 5" stroke={colors.gray[400]} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
             </Svg>
           </TouchableOpacity>
-          <Text style={styles.subHeaderTitle}>Detalhes da merenda</Text>
+          <Text style={styles.subHeaderTitle}>{t('merenda.details')}</Text>
           <View style={{ width: 32 }} />
         </View>
 
@@ -136,7 +146,7 @@ export default function MerendaScreen() {
                   </Svg>
                 )}
                 <Text style={[styles.underlineTabText, tab === 'cardapio' && styles.underlineTabTextActive]}>
-                  Cardápio
+                  {t('merenda.cardapio')}
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -150,7 +160,7 @@ export default function MerendaScreen() {
                   </Svg>
                 )}
                 <Text style={[styles.underlineTabText, tab === 'nutricional' && styles.underlineTabTextActive]}>
-                  Valores nutricionais
+                  {t('merenda.nutricional')}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -158,10 +168,10 @@ export default function MerendaScreen() {
             {/* Filter chips */}
             <View style={styles.chipsRow}>
               <View style={styles.chipGreen}>
-                <Text style={styles.chipGreenText}>{selected.periodo}</Text>
+                <Text style={styles.chipGreenText}>{t(selected.periodoKey)}</Text>
               </View>
               <View style={styles.chipBlue}>
-                <Text style={styles.chipBlueText}>{selected.tipoRefeicao}</Text>
+                <Text style={styles.chipBlueText}>{t(selected.tipoRefeicaoKey)}</Text>
               </View>
             </View>
 
@@ -169,25 +179,25 @@ export default function MerendaScreen() {
               {tab === 'cardapio'
                 ? selected.cardapio.map((item, idx) => (
                     <View key={idx} style={styles.card}>
-                      <Text style={styles.cardTitle}>{item.nome}</Text>
+                      <Text style={styles.cardTitle}>{t(item.nomeKey)}</Text>
                       <View style={styles.cardTable}>
                         <View style={styles.cardRow}>
-                          <Text style={styles.cardLabel}>Quantidade</Text>
+                          <Text style={styles.cardLabel}>{t('merenda.quantity')}</Text>
                           <Text style={styles.cardValue}>{item.quantidade}</Text>
                         </View>
                         <View style={[styles.cardRow, styles.cardRowBorder]}>
-                          <Text style={styles.cardLabel}>Unidade</Text>
-                          <Text style={styles.cardValue}>{item.unidade}</Text>
+                          <Text style={styles.cardLabel}>{t('merenda.unit')}</Text>
+                          <Text style={styles.cardValue}>{t(item.unidadeKey)}</Text>
                         </View>
                       </View>
                     </View>
                   ))
                 : selected.valoresNutricionais.map((item, idx) => (
                     <View key={idx} style={styles.card}>
-                      <Text style={styles.cardTitle}>{item.nome}</Text>
+                      <Text style={styles.cardTitle}>{t(item.nomeKey)}</Text>
                       <View style={styles.cardTable}>
                         <View style={styles.cardRow}>
-                          <Text style={styles.cardLabel}>Quantidade</Text>
+                          <Text style={styles.cardLabel}>{t('merenda.quantity')}</Text>
                           <Text style={styles.cardValue}>{item.quantidade}</Text>
                         </View>
                       </View>
@@ -206,35 +216,35 @@ export default function MerendaScreen() {
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         {merendas.map((merenda) => (
           <View key={merenda.id} style={styles.card}>
-            <Text style={styles.cardTitle}>{merenda.periodo}</Text>
+            <Text style={styles.cardTitle}>{t(merenda.periodoKey)}</Text>
 
             <View style={styles.cardTable}>
               <View style={styles.cardRow}>
-                <Text style={styles.cardLabel}>Data de início</Text>
+                <Text style={styles.cardLabel}>{t('merenda.startDate')}</Text>
                 <Text style={styles.cardValue}>{merenda.dataInicio}</Text>
               </View>
               <View style={[styles.cardRow, styles.cardRowBorder]}>
-                <Text style={styles.cardLabel}>Data de término</Text>
+                <Text style={styles.cardLabel}>{t('merenda.endDate')}</Text>
                 <Text style={styles.cardValue}>{merenda.dataTermino}</Text>
               </View>
               <View style={[styles.cardRow, styles.cardRowBorder]}>
-                <Text style={styles.cardLabel}>Tipo de refeição</Text>
+                <Text style={styles.cardLabel}>{t('merenda.mealType')}</Text>
                 <View style={styles.chipBlue}>
-                  <Text style={styles.chipBlueText}>{merenda.tipoRefeicao}</Text>
+                  <Text style={styles.chipBlueText}>{t(merenda.tipoRefeicaoKey)}</Text>
                 </View>
               </View>
               <View style={[styles.cardRow, styles.cardRowBorder]}>
-                <Text style={styles.cardLabel}>Turno</Text>
-                <Text style={styles.cardValue}>{merenda.turno}</Text>
+                <Text style={styles.cardLabel}>{t('merenda.shift')}</Text>
+                <Text style={styles.cardValue}>{t(merenda.turnoKey)}</Text>
               </View>
               <View style={[styles.cardRow, styles.cardRowBorder, { alignItems: 'flex-start', paddingVertical: 12 }]}>
-                <Text style={styles.cardLabel}>Dias da semana</Text>
+                <Text style={styles.cardLabel}>{t('merenda.weekDays')}</Text>
                 <View style={styles.diasGrid}>
                   {merenda.dias.map((dia) => {
                     const c = DIA_COLORS[dia] ?? DIA_COLORS.Seg;
                     return (
                       <View key={dia} style={[styles.diaChip, { backgroundColor: c.bg, borderColor: c.border }]}>
-                        <Text style={[styles.diaChipText, { color: c.text }]}>{dia}</Text>
+                        <Text style={[styles.diaChipText, { color: c.text }]}>{t(DIA_KEYS[dia] ?? dia)}</Text>
                       </View>
                     );
                   })}
@@ -243,7 +253,7 @@ export default function MerendaScreen() {
             </View>
 
             <Button
-              label="Visualizar"
+              label={t('merenda.view')}
               variant="secondary"
               size="sm"
               onPress={() => { setSelected(merenda); setViewState('detalhe'); }}

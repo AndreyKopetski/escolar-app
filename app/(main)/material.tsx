@@ -6,22 +6,23 @@ import Svg, { Path, Circle } from 'react-native-svg';
 import { useApp } from '@/contexts/AppContext';
 import Button from '@/components/Button';
 import { colors } from '@/constants/colors';
+import { useT } from '@/hooks/useT';
 
 // ─── Types ────────────────────────────────────────────────
 
 type ViewState = 'home' | 'detalhe';
 
 interface ItemMaterial {
-  nome: string;
+  nomeKey: string;
   quantidade: number;
   observacao: string | null;
 }
 
 interface ListaMaterial {
   id: string;
-  titulo: string;
+  tituloKey: string;
   ano: string;
-  nivelEnsino: string;
+  nivelEnsinoKey: string;
   itens: ItemMaterial[];
 }
 
@@ -30,16 +31,16 @@ interface ListaMaterial {
 const listas: ListaMaterial[] = [
   {
     id: '1',
-    titulo: 'Lista de Materiais 2025',
+    tituloKey: 'material.title1',
     ano: '2025',
-    nivelEnsino: 'Educação Infantil',
+    nivelEnsinoKey: 'material.levelEarlyChildhood',
     itens: [
-      { nome: 'Lápis', quantidade: 3, observacao: null },
-      { nome: 'Borracha', quantidade: 3, observacao: null },
-      { nome: 'Apontador de Lápis', quantidade: 3, observacao: null },
-      { nome: 'Caderno Matéria', quantidade: 3, observacao: null },
-      { nome: 'Tesoura', quantidade: 1, observacao: null },
-      { nome: 'Cola Bastão', quantidade: 2, observacao: null },
+      { nomeKey: 'material.item.pencil', quantidade: 3, observacao: null },
+      { nomeKey: 'material.item.eraser', quantidade: 3, observacao: null },
+      { nomeKey: 'material.item.pencilSharpener', quantidade: 3, observacao: null },
+      { nomeKey: 'material.item.subjectNotebook', quantidade: 3, observacao: null },
+      { nomeKey: 'material.item.scissors', quantidade: 1, observacao: null },
+      { nomeKey: 'material.item.glueStick', quantidade: 2, observacao: null },
     ],
   },
 ];
@@ -47,6 +48,7 @@ const listas: ListaMaterial[] = [
 // ─── Tela ────────────────────────────────────────────────
 
 export default function MaterialScreen() {
+  const t = useT();
   const { setHideHeader } = useApp();
   const [viewState, setViewState] = useState<ViewState>('home');
   const [selected, setSelected] = useState<ListaMaterial | null>(null);
@@ -71,7 +73,7 @@ export default function MaterialScreen() {
               <Path d="M19 12H5M5 12L12 19M5 12L12 5" stroke={colors.gray[400]} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
             </Svg>
           </TouchableOpacity>
-          <Text style={styles.subHeaderTitle}>Detalhes do material</Text>
+          <Text style={styles.subHeaderTitle}>{t('material.details')}</Text>
           <View style={{ width: 32 }} />
         </View>
 
@@ -80,27 +82,27 @@ export default function MaterialScreen() {
             {/* Filter chips */}
             <View style={styles.chipsRow}>
               <View style={styles.chipGreen}>
-                <Text style={styles.chipGreenText}>{selected.titulo}</Text>
+                <Text style={styles.chipGreenText}>{t(selected.tituloKey)}</Text>
               </View>
               <View style={styles.chipViolet}>
                 <Text style={styles.chipVioletText}>{selected.ano}</Text>
               </View>
               <View style={styles.chipWarning}>
-                <Text style={styles.chipWarningText}>{selected.nivelEnsino}</Text>
+                <Text style={styles.chipWarningText}>{t(selected.nivelEnsinoKey)}</Text>
               </View>
             </View>
 
             <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
               {selected.itens.map((item, idx) => (
                 <View key={idx} style={styles.card}>
-                  <Text style={styles.cardTitle}>{item.nome}</Text>
+                  <Text style={styles.cardTitle}>{t(item.nomeKey)}</Text>
                   <View style={styles.cardTable}>
                     <View style={styles.cardRow}>
-                      <Text style={styles.cardLabel}>Quantidade</Text>
+                      <Text style={styles.cardLabel}>{t('material.quantity')}</Text>
                       <Text style={styles.cardValue}>{item.quantidade}</Text>
                     </View>
                     <View style={[styles.cardRow, styles.cardRowBorder]}>
-                      <Text style={styles.cardLabel}>Observação</Text>
+                      <Text style={styles.cardLabel}>{t('material.observation')}</Text>
                       <Text style={[styles.cardValue, !item.observacao && styles.cardValueEmpty]}>
                         {item.observacao ?? '---'}
                       </Text>
@@ -121,25 +123,25 @@ export default function MaterialScreen() {
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         {listas.map((lista) => (
           <View key={lista.id} style={styles.card}>
-            <Text style={styles.cardTitle}>{lista.titulo}</Text>
+            <Text style={styles.cardTitle}>{t(lista.tituloKey)}</Text>
 
             <View style={styles.cardTable}>
               <View style={styles.cardRow}>
-                <Text style={styles.cardLabel}>Ano</Text>
+                <Text style={styles.cardLabel}>{t('material.year')}</Text>
                 <View style={styles.chipViolet}>
                   <Text style={styles.chipVioletText}>{lista.ano}</Text>
                 </View>
               </View>
               <View style={[styles.cardRow, styles.cardRowBorder]}>
-                <Text style={styles.cardLabel}>Nível de ensino</Text>
+                <Text style={styles.cardLabel}>{t('material.level')}</Text>
                 <View style={styles.chipWarning}>
-                  <Text style={styles.chipWarningText}>{lista.nivelEnsino}</Text>
+                  <Text style={styles.chipWarningText}>{t(lista.nivelEnsinoKey)}</Text>
                 </View>
               </View>
             </View>
 
             <Button
-              label="Visualizar"
+              label={t('material.view')}
               variant="secondary"
               size="sm"
               onPress={() => { setSelected(lista); setViewState('detalhe'); }}

@@ -5,6 +5,7 @@ import {
 } from 'react-native';
 import Svg, { Path, Circle } from 'react-native-svg';
 import { colors } from '@/constants/colors';
+import { useT } from '@/hooks/useT';
 
 // ─── Types ────────────────────────────────────────────────
 
@@ -13,7 +14,7 @@ type TipoObservacao = 'Mérito' | 'Advertência' | 'Ocorrência';
 interface Observacao {
   id: string;
   tipo: TipoObservacao;
-  descricao: string;
+  descricaoKey: string;
   colaborador: string;
   data: string;
 }
@@ -24,28 +25,28 @@ const observacoes: Observacao[] = [
   {
     id: '1',
     tipo: 'Mérito',
-    descricao: 'O aluno demonstra notável aptidão para atividades esportivas',
+    descricaoKey: 'diario.obsDesc1',
     colaborador: 'João da Silva',
     data: '10/03/2025',
   },
   {
     id: '2',
     tipo: 'Advertência',
-    descricao: 'O comportamento do aluno tem se demonstrado inadequado durante as aulas.',
+    descricaoKey: 'diario.obsDesc2',
     colaborador: 'João da Silva',
     data: '09/03/2025',
   },
   {
     id: '3',
     tipo: 'Mérito',
-    descricao: 'Excelente desempenho na apresentação de trabalho em grupo.',
+    descricaoKey: 'diario.obsDesc3',
     colaborador: 'Maria Carvalho',
     data: '05/03/2025',
   },
   {
     id: '4',
     tipo: 'Ocorrência',
-    descricao: 'Aluno chegou atrasado pela terceira vez consecutiva nesta semana.',
+    descricaoKey: 'diario.obsDesc4',
     colaborador: 'Carlos Lima',
     data: '03/03/2025',
   },
@@ -65,10 +66,16 @@ function getTipoStyle(tipo: TipoObservacao) {
 }
 
 function TipoBadge({ tipo }: { tipo: TipoObservacao }) {
+  const t = useT();
   const s = getTipoStyle(tipo);
+  const label = tipo === 'Mérito'
+    ? t('diario.typeMerit')
+    : tipo === 'Advertência'
+      ? t('diario.typeWarning')
+      : t('diario.typeOccurrence');
   return (
     <View style={[styles.tipoBadge, { backgroundColor: s.bg, borderColor: s.border }]}>
-      <Text style={[styles.tipoText, { color: s.text }]}>{tipo}</Text>
+      <Text style={[styles.tipoText, { color: s.text }]}>{label}</Text>
     </View>
   );
 }
@@ -76,6 +83,7 @@ function TipoBadge({ tipo }: { tipo: TipoObservacao }) {
 // ─── Tela ────────────────────────────────────────────────
 
 export default function DiarioScreen() {
+  const t = useT();
   const [detalhe, setDetalhe] = useState<Observacao | null>(null);
   const sheetAnim = useRef(new Animated.Value(600)).current;
 
@@ -104,15 +112,15 @@ export default function DiarioScreen() {
 
             <View style={styles.table}>
               <View style={styles.tableRow}>
-                <Text style={styles.tableLabel}>Descrição</Text>
-                <Text style={styles.tableValue} numberOfLines={2}>{obs.descricao}</Text>
+                <Text style={styles.tableLabel}>{t('diario.description')}</Text>
+                <Text style={styles.tableValue} numberOfLines={2}>{t(obs.descricaoKey)}</Text>
               </View>
               <View style={[styles.tableRow, styles.tableRowBorder]}>
-                <Text style={styles.tableLabel}>Colaborador</Text>
+                <Text style={styles.tableLabel}>{t('diario.collaborator')}</Text>
                 <Text style={styles.tableValue}>{obs.colaborador}</Text>
               </View>
               <View style={[styles.tableRow, styles.tableRowBorder]}>
-                <Text style={styles.tableLabel}>Data de cadastro</Text>
+                <Text style={styles.tableLabel}>{t('diario.registerDate')}</Text>
                 <Text style={styles.tableValue}>{obs.data}</Text>
               </View>
             </View>
@@ -126,7 +134,7 @@ export default function DiarioScreen() {
                 <Path d="M2 12C2 12 5 5 12 5C19 5 22 12 22 12C22 12 19 19 12 19C5 19 2 12 2 12Z" stroke={colors.brand[700]} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                 <Circle cx="12" cy="12" r="3" stroke={colors.brand[700]} strokeWidth="1.8" />
               </Svg>
-              <Text style={styles.visualizarText}>Visualizar</Text>
+              <Text style={styles.visualizarText}>{t('diario.view')}</Text>
             </TouchableOpacity>
           </View>
         ))}
@@ -140,7 +148,7 @@ export default function DiarioScreen() {
             <Animated.View style={[styles.bottomSheet, { transform: [{ translateY: sheetAnim }] }]}>
               <View style={styles.sheetHandle} />
               <View style={styles.sheetHeader}>
-                <Text style={styles.sheetTitle}>Detalhes da observação</Text>
+                <Text style={styles.sheetTitle}>{t('diario.details')}</Text>
                 <TouchableOpacity onPress={closeSheet} style={styles.closeBtn}>
                   <Svg width={24} height={24} viewBox="0 0 24 24" fill="none">
                     <Path d="M18 6L6 18M6 6l12 12" stroke={colors.gray[400]} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -151,23 +159,23 @@ export default function DiarioScreen() {
               <View style={styles.sheetBody}>
               <View style={styles.sheetGrid}>
                 <View style={styles.sheetField}>
-                  <Text style={styles.sheetLabel}>Tipo</Text>
+                  <Text style={styles.sheetLabel}>{t('diario.type')}</Text>
                   <TipoBadge tipo={detalhe.tipo} />
                 </View>
                 <View style={styles.sheetField}>
-                  <Text style={styles.sheetLabel}>Colaborador</Text>
+                  <Text style={styles.sheetLabel}>{t('diario.collaborator')}</Text>
                   <Text style={styles.sheetValue}>{detalhe.colaborador}</Text>
                 </View>
               </View>
 
               <View style={[styles.sheetField, { marginBottom: 12 }]}>
-                <Text style={styles.sheetLabel}>Data</Text>
+                <Text style={styles.sheetLabel}>{t('diario.date')}</Text>
                 <Text style={styles.sheetValue}>{detalhe.data}</Text>
               </View>
 
               <View style={styles.sheetField}>
-                <Text style={styles.sheetLabel}>Descrição</Text>
-                <Text style={styles.sheetDesc}>{detalhe.descricao}</Text>
+                <Text style={styles.sheetLabel}>{t('diario.description')}</Text>
+                <Text style={styles.sheetDesc}>{t(detalhe.descricaoKey)}</Text>
               </View>
               </View>
             </Animated.View>

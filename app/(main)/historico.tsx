@@ -8,6 +8,7 @@ import { useApp } from '@/contexts/AppContext';
 import { colors } from '@/constants/colors';
 import BimestreTabs from '@/components/BimestreTabs';
 import Button from '@/components/Button';
+import { useT } from '@/hooks/useT';
 
 // ─── Types ────────────────────────────────────────────────
 
@@ -45,59 +46,59 @@ interface Justificativa {
 
 const frequenciaPorBimestre: Record<Bimestre, FrequenciaMateria[]> = {
   '1': [
-    { nome: 'Português', presenca: 10, falta: 0 },
-    { nome: 'Matemática', presenca: 10, falta: 2 },
-    { nome: 'Ciências', presenca: 10, falta: 0 },
-    { nome: 'História', presenca: 10, falta: 2 },
-    { nome: 'Geografia', presenca: 10, falta: 0 },
-    { nome: 'Artes', presenca: 10, falta: 2 },
-    { nome: 'Educação Física', presenca: 10, falta: 1 },
-    { nome: 'Inglês', presenca: 10, falta: 3 },
-    { nome: 'Ensino Religioso', presenca: 10, falta: 0 },
+    { nome: 'boletim.subj.portugues', presenca: 10, falta: 0 },
+    { nome: 'boletim.subj.matematica', presenca: 10, falta: 2 },
+    { nome: 'boletim.subj.ciencias', presenca: 10, falta: 0 },
+    { nome: 'boletim.subj.historia', presenca: 10, falta: 2 },
+    { nome: 'boletim.subj.geografia', presenca: 10, falta: 0 },
+    { nome: 'boletim.subj.artes', presenca: 10, falta: 2 },
+    { nome: 'boletim.subj.edFisica', presenca: 10, falta: 1 },
+    { nome: 'boletim.subj.ingles', presenca: 10, falta: 3 },
+    { nome: 'boletim.subj.ensReligioso', presenca: 10, falta: 0 },
   ],
   '2': [
-    { nome: 'Português', presenca: 9, falta: 1 },
-    { nome: 'Matemática', presenca: 8, falta: 2 },
-    { nome: 'Ciências', presenca: 10, falta: 0 },
-    { nome: 'História', presenca: 9, falta: 1 },
-    { nome: 'Geografia', presenca: 10, falta: 0 },
-    { nome: 'Artes', presenca: 10, falta: 0 },
-    { nome: 'Educação Física', presenca: 9, falta: 1 },
-    { nome: 'Inglês', presenca: 8, falta: 2 },
-    { nome: 'Ensino Religioso', presenca: 10, falta: 0 },
+    { nome: 'boletim.subj.portugues', presenca: 9, falta: 1 },
+    { nome: 'boletim.subj.matematica', presenca: 8, falta: 2 },
+    { nome: 'boletim.subj.ciencias', presenca: 10, falta: 0 },
+    { nome: 'boletim.subj.historia', presenca: 9, falta: 1 },
+    { nome: 'boletim.subj.geografia', presenca: 10, falta: 0 },
+    { nome: 'boletim.subj.artes', presenca: 10, falta: 0 },
+    { nome: 'boletim.subj.edFisica', presenca: 9, falta: 1 },
+    { nome: 'boletim.subj.ingles', presenca: 8, falta: 2 },
+    { nome: 'boletim.subj.ensReligioso', presenca: 10, falta: 0 },
   ],
   '3': [
-    { nome: 'Português', presenca: 10, falta: 0 },
-    { nome: 'Matemática', presenca: 9, falta: 1 },
-    { nome: 'Ciências', presenca: 8, falta: 2 },
-    { nome: 'História', presenca: 10, falta: 0 },
-    { nome: 'Geografia', presenca: 9, falta: 1 },
-    { nome: 'Artes', presenca: 10, falta: 0 },
-    { nome: 'Educação Física', presenca: 10, falta: 0 },
-    { nome: 'Inglês', presenca: 9, falta: 1 },
-    { nome: 'Ensino Religioso', presenca: 10, falta: 0 },
+    { nome: 'boletim.subj.portugues', presenca: 10, falta: 0 },
+    { nome: 'boletim.subj.matematica', presenca: 9, falta: 1 },
+    { nome: 'boletim.subj.ciencias', presenca: 8, falta: 2 },
+    { nome: 'boletim.subj.historia', presenca: 10, falta: 0 },
+    { nome: 'boletim.subj.geografia', presenca: 9, falta: 1 },
+    { nome: 'boletim.subj.artes', presenca: 10, falta: 0 },
+    { nome: 'boletim.subj.edFisica', presenca: 10, falta: 0 },
+    { nome: 'boletim.subj.ingles', presenca: 9, falta: 1 },
+    { nome: 'boletim.subj.ensReligioso', presenca: 10, falta: 0 },
   ],
   '4': [
-    { nome: 'Português', presenca: 10, falta: 0 },
-    { nome: 'Matemática', presenca: 10, falta: 0 },
-    { nome: 'Ciências', presenca: 9, falta: 1 },
-    { nome: 'História', presenca: 8, falta: 2 },
-    { nome: 'Geografia', presenca: 10, falta: 0 },
-    { nome: 'Artes', presenca: 10, falta: 0 },
-    { nome: 'Educação Física', presenca: 10, falta: 0 },
-    { nome: 'Inglês', presenca: 9, falta: 1 },
-    { nome: 'Ensino Religioso', presenca: 10, falta: 0 },
+    { nome: 'boletim.subj.portugues', presenca: 10, falta: 0 },
+    { nome: 'boletim.subj.matematica', presenca: 10, falta: 0 },
+    { nome: 'boletim.subj.ciencias', presenca: 9, falta: 1 },
+    { nome: 'boletim.subj.historia', presenca: 8, falta: 2 },
+    { nome: 'boletim.subj.geografia', presenca: 10, falta: 0 },
+    { nome: 'boletim.subj.artes', presenca: 10, falta: 0 },
+    { nome: 'boletim.subj.edFisica', presenca: 10, falta: 0 },
+    { nome: 'boletim.subj.ingles', presenca: 9, falta: 1 },
+    { nome: 'boletim.subj.ensReligioso', presenca: 10, falta: 0 },
   ],
   'total': [
-    { nome: 'Português', presenca: 39, falta: 1 },
-    { nome: 'Matemática', presenca: 37, falta: 5 },
-    { nome: 'Ciências', presenca: 37, falta: 3 },
-    { nome: 'História', presenca: 37, falta: 5 },
-    { nome: 'Geografia', presenca: 39, falta: 1 },
-    { nome: 'Artes', presenca: 40, falta: 2 },
-    { nome: 'Educação Física', presenca: 39, falta: 2 },
-    { nome: 'Inglês', presenca: 36, falta: 7 },
-    { nome: 'Ensino Religioso', presenca: 40, falta: 0 },
+    { nome: 'boletim.subj.portugues', presenca: 39, falta: 1 },
+    { nome: 'boletim.subj.matematica', presenca: 37, falta: 5 },
+    { nome: 'boletim.subj.ciencias', presenca: 37, falta: 3 },
+    { nome: 'boletim.subj.historia', presenca: 37, falta: 5 },
+    { nome: 'boletim.subj.geografia', presenca: 39, falta: 1 },
+    { nome: 'boletim.subj.artes', presenca: 40, falta: 2 },
+    { nome: 'boletim.subj.edFisica', presenca: 39, falta: 2 },
+    { nome: 'boletim.subj.ingles', presenca: 36, falta: 7 },
+    { nome: 'boletim.subj.ensReligioso', presenca: 40, falta: 0 },
   ],
 };
 
@@ -123,26 +124,26 @@ const JUSTIFICATIVA_PADRAO: Omit<Justificativa, 'materia' | 'conteudo'> = {
 
 const detalhesPorData: Record<string, DetalhePresenca[]> = {
   '10/02/2025': [
-    { materia: 'Português', status: 'PRESENÇA', colaborador: 'João da Silva' },
-    { materia: 'Português', status: 'FALTA', colaborador: 'Maria Carvalho' },
+    { materia: 'boletim.subj.portugues', status: 'PRESENÇA', colaborador: 'João da Silva' },
+    { materia: 'boletim.subj.portugues', status: 'FALTA', colaborador: 'Maria Carvalho' },
     {
-      materia: 'Ciências', status: 'FALTA JUSTIFICADA', colaborador: 'João da Silva',
-      justificativa: { ...JUSTIFICATIVA_PADRAO, materia: 'Ciências', conteudo: 'Evolução' },
+      materia: 'boletim.subj.ciencias', status: 'FALTA JUSTIFICADA', colaborador: 'João da Silva',
+      justificativa: { ...JUSTIFICATIVA_PADRAO, materia: 'boletim.subj.ciencias', conteudo: 'Evolução' },
     },
     {
-      materia: 'História', status: 'FALTA JUSTIFICADA', colaborador: 'João da Silva',
-      justificativa: { ...JUSTIFICATIVA_PADRAO, materia: 'História', conteudo: 'Revolução Industrial' },
+      materia: 'boletim.subj.historia', status: 'FALTA JUSTIFICADA', colaborador: 'João da Silva',
+      justificativa: { ...JUSTIFICATIVA_PADRAO, materia: 'boletim.subj.historia', conteudo: 'Revolução Industrial' },
     },
-    { materia: 'Geografia', status: 'FALTA', colaborador: 'Maria Carvalho' },
-    { materia: 'Matemática', status: 'PRESENÇA', colaborador: 'João da Silva' },
-    { materia: 'Artes', status: 'PRESENÇA', colaborador: 'João da Silva' },
+    { materia: 'boletim.subj.geografia', status: 'FALTA', colaborador: 'Maria Carvalho' },
+    { materia: 'boletim.subj.matematica', status: 'PRESENÇA', colaborador: 'João da Silva' },
+    { materia: 'boletim.subj.artes', status: 'PRESENÇA', colaborador: 'João da Silva' },
   ],
   '09/02/2025': [
-    { materia: 'Português', status: 'PRESENÇA', colaborador: 'João da Silva' },
-    { materia: 'Matemática', status: 'PRESENÇA', colaborador: 'João da Silva' },
-    { materia: 'Ciências', status: 'PRESENÇA', colaborador: 'João da Silva' },
-    { materia: 'História', status: 'PRESENÇA', colaborador: 'João da Silva' },
-    { materia: 'Geografia', status: 'PRESENÇA', colaborador: 'João da Silva' },
+    { materia: 'boletim.subj.portugues', status: 'PRESENÇA', colaborador: 'João da Silva' },
+    { materia: 'boletim.subj.matematica', status: 'PRESENÇA', colaborador: 'João da Silva' },
+    { materia: 'boletim.subj.ciencias', status: 'PRESENÇA', colaborador: 'João da Silva' },
+    { materia: 'boletim.subj.historia', status: 'PRESENÇA', colaborador: 'João da Silva' },
+    { materia: 'boletim.subj.geografia', status: 'PRESENÇA', colaborador: 'João da Silva' },
   ],
 };
 
@@ -168,7 +169,13 @@ function getStatusStyle(status: Status) {
 }
 
 function StatusBadge({ status }: { status: Status }) {
+  const t = useT();
   const s = getStatusStyle(status);
+  const statusLabel = status === 'PRESENÇA'
+    ? t('historico.presence')
+    : status === 'FALTA'
+      ? t('historico.absence')
+      : t('historico.justified');
   return (
     <View style={[styles.statusBadge, { backgroundColor: s.bg, borderColor: s.border }]}>
       <Svg width={14} height={14} viewBox="0 0 24 24" fill="none">
@@ -182,7 +189,7 @@ function StatusBadge({ status }: { status: Status }) {
           <Path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zM8 12h8" stroke={s.text} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         )}
       </Svg>
-      <Text style={[styles.statusText, { color: s.text }]}>{status}</Text>
+      <Text style={[styles.statusText, { color: s.text }]}>{statusLabel}</Text>
     </View>
   );
 }
@@ -190,6 +197,7 @@ function StatusBadge({ status }: { status: Status }) {
 // ─── Tela ────────────────────────────────────────────────
 
 export default function FrequenciaScreen() {
+  const t = useT();
   const { setHideHeader } = useApp();
   const [bimestre, setBimestre] = useState<Bimestre>('1');
   const [viewState, setViewState] = useState<ViewState>('home');
@@ -235,7 +243,7 @@ export default function FrequenciaScreen() {
               <Path d="M19 12H5M5 12L12 19M5 12L12 5" stroke={colors.gray[400]} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
             </Svg>
           </TouchableOpacity>
-          <Text style={styles.subHeaderTitle}>Detalhes da chamada</Text>
+          <Text style={styles.subHeaderTitle}>{t('historico.callDetails')}</Text>
           <View style={{ width: 32 }} />
         </View>
 
@@ -253,16 +261,16 @@ export default function FrequenciaScreen() {
               {detalhes.map((item, idx) => (
                 <View key={idx} style={styles.presencaCard}>
                   <View style={styles.presencaCardHeader}>
-                    <Text style={styles.presencaMateria}>{item.materia}</Text>
+                    <Text style={styles.presencaMateria}>{t(item.materia)}</Text>
                     <StatusBadge status={item.status} />
                   </View>
                   <View style={styles.colaboradorRow}>
-                    <Text style={styles.colaboradorLabel}>Colaborador</Text>
+                    <Text style={styles.colaboradorLabel}>{t('historico.collaborator')}</Text>
                     <Text style={styles.colaboradorValue}>{item.colaborador}</Text>
                   </View>
                   {item.status === 'FALTA JUSTIFICADA' && item.justificativa && (
                     <Button
-                      label="Visualizar"
+                      label={t('historico.view')}
                       variant="secondary"
                       size="sm"
                       onPress={() => setJustificativa(item.justificativa!)}
@@ -289,7 +297,7 @@ export default function FrequenciaScreen() {
               <Animated.View style={[styles.bottomSheet, { transform: [{ translateY: sheetAnim }] }]}>
               <View style={styles.sheetHandle} />
               <View style={styles.sheetHeader}>
-                <Text style={styles.sheetTitle}>Detalhes da justificativa</Text>
+                <Text style={styles.sheetTitle}>{t('historico.justification')}</Text>
                 <TouchableOpacity onPress={closeSheet} style={styles.closeBtn}>
                   <Svg width={24} height={24} viewBox="0 0 24 24" fill="none">
                     <Path d="M18 6L6 18M6 6l12 12" stroke={colors.gray[400]} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -300,30 +308,30 @@ export default function FrequenciaScreen() {
               <View style={styles.sheetBody}>
               <View style={styles.sheetGrid}>
                 <View style={styles.sheetField}>
-                  <Text style={styles.sheetLabel}>Data da chamada</Text>
+                  <Text style={styles.sheetLabel}>{t('historico.callDate')}</Text>
                   <Text style={styles.sheetValue}>{justificativa.dataChamada}</Text>
                 </View>
                 <View style={styles.sheetField}>
-                  <Text style={styles.sheetLabel}>Colaborador</Text>
+                  <Text style={styles.sheetLabel}>{t('historico.collaborator')}</Text>
                   <Text style={styles.sheetValue}>{justificativa.colaborador}</Text>
                 </View>
                 <View style={styles.sheetField}>
-                  <Text style={styles.sheetLabel}>Matéria</Text>
-                  <Text style={styles.sheetValue}>{justificativa.materia}</Text>
+                  <Text style={styles.sheetLabel}>{t('historico.subject')}</Text>
+                  <Text style={styles.sheetValue}>{t(justificativa.materia)}</Text>
                 </View>
                 <View style={styles.sheetField}>
-                  <Text style={styles.sheetLabel}>Conteúdo</Text>
+                  <Text style={styles.sheetLabel}>{t('historico.content')}</Text>
                   <Text style={styles.sheetValue}>{justificativa.conteudo}</Text>
                 </View>
               </View>
 
               <View style={[styles.sheetField, { marginTop: 4, width: '100%' }]}>
-                <Text style={styles.sheetLabel}>Descrição</Text>
+                <Text style={styles.sheetLabel}>{t('historico.descr')}</Text>
                 <Text style={styles.sheetDesc}>{justificativa.descricao}</Text>
               </View>
 
               <View style={[styles.sheetField, { marginTop: 12 }]}>
-                <Text style={styles.sheetLabel}>Arquivo</Text>
+                <Text style={styles.sheetLabel}>{t('historico.file')}</Text>
                 <View style={styles.arquivoCard}>
                   <View style={styles.pdfBadge}>
                     <Text style={styles.pdfText}>PDF</Text>
@@ -355,7 +363,7 @@ export default function FrequenciaScreen() {
               <Path d="M19 12H5M5 12L12 19M5 12L12 5" stroke={colors.gray[400]} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
             </Svg>
           </TouchableOpacity>
-          <Text style={styles.subHeaderTitle}>Chamadas</Text>
+          <Text style={styles.subHeaderTitle}>{t('historico.calls')}</Text>
           <View style={{ width: 32 }} />
         </View>
 
@@ -365,7 +373,7 @@ export default function FrequenciaScreen() {
               <View style={styles.table}>
                 {/* Header tabela */}
                 <View style={[styles.tableRow, styles.tableHeaderRow]}>
-                  <Text style={[styles.tableHeaderText, { flex: 1, textAlign: 'center' }]}>Data da chamada</Text>
+                  <Text style={[styles.tableHeaderText, { flex: 1, textAlign: 'center' }]}>{t('historico.callDate')}</Text>
                   <Text style={[styles.tableHeaderText, { width: 64, textAlign: 'center' }]}>Ação</Text>
                 </View>
                 {chamadas.map((item) => (
@@ -405,9 +413,9 @@ export default function FrequenciaScreen() {
       {/* Tabela */}
       <View style={styles.tableWrapper}>
         <View style={[styles.tableRow, styles.tableHeaderRow]}>
-          <Text style={[styles.tableHeaderText, { flex: 1 }]}>Matéria</Text>
-          <Text style={[styles.tableHeaderText, { width: 90, textAlign: 'center' }]}>Presenças</Text>
-          <Text style={[styles.tableHeaderText, { width: 72, textAlign: 'center' }]}>Faltas</Text>
+          <Text style={[styles.tableHeaderText, { flex: 1 }]}>{t('historico.subject')}</Text>
+          <Text style={[styles.tableHeaderText, { width: 90, textAlign: 'center' }]}>{t('historico.presences')}</Text>
+          <Text style={[styles.tableHeaderText, { width: 72, textAlign: 'center' }]}>{t('historico.absences')}</Text>
         </View>
 
         <FlatList
@@ -416,7 +424,7 @@ export default function FrequenciaScreen() {
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
             <View style={[styles.tableRow, styles.tableBodyRow]}>
-              <Text style={[styles.tableCell, { flex: 1 }]}>{item.nome}</Text>
+              <Text style={[styles.tableCell, { flex: 1 }]}>{t(item.nome)}</Text>
               <View style={{ width: 90, alignItems: 'center' }}>
                 <View style={styles.presencaBadge}>
                   <Text style={styles.presencaBadgeText}>{item.presenca}</Text>
@@ -436,7 +444,7 @@ export default function FrequenciaScreen() {
 
       {/* Link Chamadas Realizadas */}
       <Button
-        label="Visualizar chamadas"
+        label={t('historico.viewCalls')}
         variant="tertiary"
         size="sm"
         onPress={() => setViewState('chamadas')}

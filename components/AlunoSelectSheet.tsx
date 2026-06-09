@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Modal, Pressable, Animated, I
 import Svg, { Path } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useApp, Aluno } from '@/contexts/AppContext';
+import { useT } from '@/hooks/useT';
 import Button from '@/components/Button';
 import { colors, gradients } from '@/constants/colors';
 
@@ -19,6 +20,7 @@ const alunosPorAno: Record<string, Aluno[]> = {
 
 export default function AlunoSelectSheet() {
   const { isStudentSheetVisible, setStudentSheetVisible, activeStudent, setActiveStudent, setActiveYear } = useApp();
+  const t = useT();
 
   const [anoTemp, setAnoTemp] = useState('2026');
   const [alunoTemp, setAlunoTemp] = useState<Aluno>(alunosPorAno['2026'][0]);
@@ -46,7 +48,7 @@ export default function AlunoSelectSheet() {
         <Animated.View style={[styles.bottomSheet, { transform: [{ translateY: sheetAnim }] }]}>
         <View style={styles.sheetHandle} />
         <View style={styles.sheetHeader}>
-          <Text style={styles.sheetTitle}>Selecione o aluno:</Text>
+          <Text style={styles.sheetTitle}>{t('alunoSelect.title')}</Text>
           <TouchableOpacity onPress={closeSheet} style={styles.closeBtn} activeOpacity={0.7}>
             <Svg width={24} height={24} viewBox="0 0 24 24" fill="none">
               <Path d="M18 6L6 18M6 6l12 12" stroke={colors.gray[400]} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -113,7 +115,7 @@ export default function AlunoSelectSheet() {
 
           {/* Botões */}
           <Button
-            label="Visualizar Aluno"
+            label={t('alunoSelect.viewBtn')}
             size="xl"
             fullWidth
             onPress={() => { setActiveStudent(alunoTemp); setActiveYear(anoTemp); closeSheet(); }}
