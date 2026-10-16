@@ -63,6 +63,16 @@ export default function LoginScreen() {
     const hasValidDomain = trimmed.includes('@') && trimmed.split('@')[1]?.includes('.');
     setLoginError('');
 
+    // Protótipo: "Entrar" com o e-mail vazio cai direto na visão do responsável.
+    // Os perfis gestor/professor/equipe continuam acessíveis digitando o e-mail.
+    if (!trimmed) {
+      setUserRole('responsavel');
+      setUserEmail('carla@gmail.com');
+      setDisplayName('Carla');
+      router.replace({ pathname: '/(main)/boletim', params: { nome: 'Carla' } });
+      return;
+    }
+
     if (!hasValidDomain) {
       setLoginError(t('login.error'));
       return;

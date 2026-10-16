@@ -61,7 +61,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [hasBiometric, setHasBiometric] = useState(true);
   const [unreadNotificationsCount, setUnreadNotificationsCount] = useState(4);
   const [profilePhoto, setProfilePhoto] = useState<number | null>(null);
-  const [language, setLanguage] = useState<'es' | 'pt' | 'en'>('es');
+  const [language, setLanguage] = useState<'es' | 'pt' | 'en'>('pt');
 
   return (
     <AppContext.Provider value={{

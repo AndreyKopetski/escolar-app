@@ -122,8 +122,8 @@ export default function ProfileSheet() {
                 <Text style={styles.menuItemText}>{t('profile.language')}</Text>
                 <View style={styles.langPills}>
                   {([
-                    { key: 'es', label: 'ES', full: 'Español' },
                     { key: 'pt', label: 'PT', full: 'Português' },
+                    { key: 'es', label: 'ES', full: 'Español' },
                     { key: 'en', label: 'EN', full: 'English' },
                   ] as const).map((opt) => (
                     <TouchableOpacity
